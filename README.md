@@ -56,10 +56,10 @@ import pricing_api_client
 from pricing_api_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost
+# Defining the host is optional and defaults to https://pricing.baselinehq.cloud
 # See configuration.py for a list of all supported configuration parameters.
 configuration = pricing_api_client.Configuration(
-    host = "http://localhost"
+    host = "https://pricing.baselinehq.cloud"
 )
 
 
@@ -81,7 +81,7 @@ with pricing_api_client.ApiClient(configuration) as api_client:
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *http://localhost*
+All URIs are relative to *https://pricing.baselinehq.cloud*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------

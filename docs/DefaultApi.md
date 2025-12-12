@@ -1,6 +1,6 @@
 # pricing_api_client.DefaultApi
 
-All URIs are relative to *http://localhost*
+All URIs are relative to *https://pricing.baselinehq.cloud*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -30,10 +30,10 @@ import pricing_api_client
 from pricing_api_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost
+# Defining the host is optional and defaults to https://pricing.baselinehq.cloud
 # See configuration.py for a list of all supported configuration parameters.
 configuration = pricing_api_client.Configuration(
-    host = "http://localhost"
+    host = "https://pricing.baselinehq.cloud"
 )
 
 
@@ -95,10 +95,10 @@ from pricing_api_client.models.types_custom_pricing_response import TypesCustomP
 from pricing_api_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost
+# Defining the host is optional and defaults to https://pricing.baselinehq.cloud
 # See configuration.py for a list of all supported configuration parameters.
 configuration = pricing_api_client.Configuration(
-    host = "http://localhost"
+    host = "https://pricing.baselinehq.cloud"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -174,10 +174,10 @@ from pricing_api_client.models.types_marketplace_providers_response import Types
 from pricing_api_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost
+# Defining the host is optional and defaults to https://pricing.baselinehq.cloud
 # See configuration.py for a list of all supported configuration parameters.
 configuration = pricing_api_client.Configuration(
-    host = "http://localhost"
+    host = "https://pricing.baselinehq.cloud"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -250,10 +250,10 @@ from pricing_api_client.models.types_custom_pricing_response import TypesCustomP
 from pricing_api_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost
+# Defining the host is optional and defaults to https://pricing.baselinehq.cloud
 # See configuration.py for a list of all supported configuration parameters.
 configuration = pricing_api_client.Configuration(
-    host = "http://localhost"
+    host = "https://pricing.baselinehq.cloud"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -330,10 +330,10 @@ from pricing_api_client.models.schema_compute_pricings_row import SchemaComputeP
 from pricing_api_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost
+# Defining the host is optional and defaults to https://pricing.baselinehq.cloud
 # See configuration.py for a list of all supported configuration parameters.
 configuration = pricing_api_client.Configuration(
-    host = "http://localhost"
+    host = "https://pricing.baselinehq.cloud"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -410,10 +410,10 @@ from pricing_api_client.models.types_disk import TypesDisk
 from pricing_api_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost
+# Defining the host is optional and defaults to https://pricing.baselinehq.cloud
 # See configuration.py for a list of all supported configuration parameters.
 configuration = pricing_api_client.Configuration(
-    host = "http://localhost"
+    host = "https://pricing.baselinehq.cloud"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -489,10 +489,10 @@ from pricing_api_client.models.provider_config import ProviderConfig
 from pricing_api_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost
+# Defining the host is optional and defaults to https://pricing.baselinehq.cloud
 # See configuration.py for a list of all supported configuration parameters.
 configuration = pricing_api_client.Configuration(
-    host = "http://localhost"
+    host = "https://pricing.baselinehq.cloud"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -566,10 +566,10 @@ from pricing_api_client.models.types_compute_results_value_inner import TypesCom
 from pricing_api_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost
+# Defining the host is optional and defaults to https://pricing.baselinehq.cloud
 # See configuration.py for a list of all supported configuration parameters.
 configuration = pricing_api_client.Configuration(
-    host = "http://localhost"
+    host = "https://pricing.baselinehq.cloud"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -647,10 +647,10 @@ from pricing_api_client.models.types_disk_results_value_inner import TypesDiskRe
 from pricing_api_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost
+# Defining the host is optional and defaults to https://pricing.baselinehq.cloud
 # See configuration.py for a list of all supported configuration parameters.
 configuration = pricing_api_client.Configuration(
-    host = "http://localhost"
+    host = "https://pricing.baselinehq.cloud"
 )
 
 # The client must configure the authentication and authorization parameters

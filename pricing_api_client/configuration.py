@@ -214,7 +214,7 @@ conf = pricing_api_client.Configuration(
     ) -> None:
         """Constructor
         """
-        self._base_path = "http://localhost" if host is None else host
+        self._base_path = "https://pricing.baselinehq.cloud" if host is None else host
         """Default Base url
         """
         self.server_index = 0 if server_index is None and host is None else server_index
@@ -546,7 +546,11 @@ conf = pricing_api_client.Configuration(
         """
         return [
             {
-                'url': "",
+                'url': "https://pricing.baselinehq.cloud",
+                'description': "No description provided",
+            },
+            {
+                'url': "http://pricing.baselinehq.cloud",
                 'description': "No description provided",
             }
         ]
