@@ -3,8 +3,11 @@ import logging
 import math
 
 from kubernetes import client as k8s_client, config as k8s_config
-from pricing_api_client import AuthenticatedClient
-from pricing_api_client.api.default.post_pricing_compute import sync
+import pricing_api_client
+from pricing_api_client.models.github_com_baselinehq_golang_shared_types_instance import GithubComBaselinehqGolangSharedTypesInstance
+from pricing_api_client.models.schema_compute_pricings_row import SchemaComputePricingsRow
+from pricing_api_client.rest import ApiException
+from pprint import pprint
 from pricing_api_client.models.github_com_baselinehq_golang_shared_types_instance import GithubComBaselinehqGolangSharedTypesInstance
 from pricing_api_client.models.github_com_baselinehq_golang_shared_types_provider import  GithubComBaselinehqGolangSharedTypesProvider
 from pricing_api_client.models.github_com_baselinehq_golang_shared_types_service import  GithubComBaselinehqGolangSharedTypesService
@@ -59,14 +62,14 @@ def get_provider_instance(node: Any) -> GithubComBaselinehqGolangSharedTypesInst
         provider_id = str(getattr(node, "provider_id", "")).lower()
 
     if provider_id.startswith("gce") or provider_id.startswith("gce://"):
-        return GithubComBaselinehqGolangSharedTypesInstance(provider=GithubComBaselinehqGolangSharedTypesProvider.GCP, service=GithubComBaselinehqGolangSharedTypesService.COMPUTEENGINE)
+        return GithubComBaselinehqGolangSharedTypesInstance(provider=GithubComBaselinehqGolangSharedTypesProvider.GCP, service=GithubComBaselinehqGolangSharedTypesService.ComputeEngine)
     if provider_id.startswith("aws") or provider_id.startswith("aws://"):
-        return GithubComBaselinehqGolangSharedTypesInstance(provider=GithubComBaselinehqGolangSharedTypesProvider.AWS, service=GithubComBaselinehqGolangSharedTypesService.AMAZONEC2)
+        return GithubComBaselinehqGolangSharedTypesInstance(provider=GithubComBaselinehqGolangSharedTypesProvider.AWS, service=GithubComBaselinehqGolangSharedTypesService.AmazonEC2)
     if provider_id.startswith("azure") or provider_id.startswith("azure://"):
-        return GithubComBaselinehqGolangSharedTypesInstance(provider=GithubComBaselinehqGolangSharedTypesProvider.AZURE, service=GithubComBaselinehqGolangSharedTypesService.AZURECOMPUTE)
+        return GithubComBaselinehqGolangSharedTypesInstance(provider=GithubComBaselinehqGolangSharedTypesProvider.Azure, service=GithubComBaselinehqGolangSharedTypesService.AzureCompute)
     if provider_id.startswith("digitalocean") or provider_id.startswith("do://"):
-        return GithubComBaselinehqGolangSharedTypesInstance(provider=GithubComBaselinehqGolangSharedTypesProvider.DIGITALOCEAN, service=GithubComBaselinehqGolangSharedTypesService.DROPLET)
-    return GithubComBaselinehqGolangSharedTypesInstance(provider=GithubComBaselinehqGolangSharedTypesProvider.BASE, service=GithubComBaselinehqGolangSharedTypesService.BASECOMPUTE)
+        return GithubComBaselinehqGolangSharedTypesInstance(provider=GithubComBaselinehqGolangSharedTypesProvider.DigitalOcean, service=GithubComBaselinehqGolangSharedTypesService.Droplet)
+    return GithubComBaselinehqGolangSharedTypesInstance(provider=GithubComBaselinehqGolangSharedTypesProvider.Base, service=GithubComBaselinehqGolangSharedTypesService.BaseCompute)
 
 
 def get_usage_type(node: Any) -> GithubComBaselinehqGolangSharedTypesUsageType:
@@ -143,7 +146,14 @@ def get_instance_from_node(node: Any) -> GithubComBaselinehqGolangSharedTypesIns
 token = os.getenv("BASELINEHQ_CLOUD_API_KEY")
 if token is None:
     raise ValueError("BASELINEHQ_CLOUD_API_KEY environment variable not set")
-client = AuthenticatedClient(base_url="https://pricing.baselinehq.cloud", token=token)
+
+configuration = pricing_api_client.Configuration(
+    host = "https://pricing.baselinehq.cloud"
+)
+
+# Configure API key authorization: ApiKeyAuth
+configuration.api_key['ApiKeyAuth'] = token
+configuration.api_key_prefix['ApiKeyAuth'] = 'Bearer'
 
 try:
     k8s_config.load_kube_config()
@@ -156,7 +166,18 @@ except Exception:
 v1 = k8s_client.CoreV1Api()
 nodes = v1.list_node().items
 for node in nodes:
+    print("-" * 20)
+    print(
+        f"Node: {node.metadata.name} ({node.metadata.uid})"
+    )
     print(get_instance_from_node(node))
-    print(node.metadata.name, sync(client=client, body=get_instance_from_node(node)))
+    with pricing_api_client.ApiClient(configuration) as api_client:
+        # Create an instance of the API class
+        api_instance = pricing_api_client.DefaultApi(api_client)
 
-
+        try:
+            # Get  pricing for an instance
+            api_response = api_instance.pricing_compute_post(get_instance_from_node(node))
+            pprint(api_response)
+        except Exception as e:
+            print("Exception when calling DefaultApi->pricing_compute_post: %s\n" % e)
