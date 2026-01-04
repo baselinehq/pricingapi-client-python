@@ -13,6 +13,7 @@ Name | Type | Description | Notes
 **region** | **str** |  | [optional] 
 **service** | [**GithubComBaselinehqGolangSharedTypesService**](GithubComBaselinehqGolangSharedTypesService.md) |  | [optional] 
 **usage_type** | [**GithubComBaselinehqGolangSharedTypesUsageType**](GithubComBaselinehqGolangSharedTypesUsageType.md) |  | [optional] 
+**use_base_pricing** | **bool** |  | [optional] 
 **vm** | [**GithubComBaselinehqGolangSharedTypesVM**](GithubComBaselinehqGolangSharedTypesVM.md) |  | [optional] 
 
 ## Example

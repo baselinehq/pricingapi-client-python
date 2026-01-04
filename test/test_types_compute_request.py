@@ -46,6 +46,7 @@ class TestTypesComputeRequest(unittest.TestCase):
                     region = '', 
                     service = 'ComputeEngine', 
                     usage_type = 'SPOT_PREEMPTIBLE', 
+                    use_base_pricing = True, 
                     vm = pricing_api_client.models.github_com_baselinehq_golang_shared_types/vm.github_com_baselinehq_golang-shared_types.VM(
                         cpu_cores = 1.337, 
                         ram_gb = 1.337, ), ),

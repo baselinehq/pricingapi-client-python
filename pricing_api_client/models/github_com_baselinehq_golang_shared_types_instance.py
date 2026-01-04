@@ -18,7 +18,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, StrictStr
+from pydantic import BaseModel, ConfigDict, StrictBool, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from pricing_api_client.models.github_com_baselinehq_golang_shared_types_provider import GithubComBaselinehqGolangSharedTypesProvider
 from pricing_api_client.models.github_com_baselinehq_golang_shared_types_service import GithubComBaselinehqGolangSharedTypesService
@@ -39,8 +39,9 @@ class GithubComBaselinehqGolangSharedTypesInstance(BaseModel):
     region: Optional[StrictStr] = None
     service: Optional[GithubComBaselinehqGolangSharedTypesService] = None
     usage_type: Optional[GithubComBaselinehqGolangSharedTypesUsageType] = None
+    use_base_pricing: Optional[StrictBool] = None
     vm: Optional[GithubComBaselinehqGolangSharedTypesVM] = None
-    __properties: ClassVar[List[str]] = ["availability_zone", "id", "instance_type", "operating_system", "provider", "region", "service", "usage_type", "vm"]
+    __properties: ClassVar[List[str]] = ["availability_zone", "id", "instance_type", "operating_system", "provider", "region", "service", "usage_type", "use_base_pricing", "vm"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -104,6 +105,7 @@ class GithubComBaselinehqGolangSharedTypesInstance(BaseModel):
             "region": obj.get("region"),
             "service": obj.get("service"),
             "usage_type": obj.get("usage_type"),
+            "use_base_pricing": obj.get("use_base_pricing"),
             "vm": GithubComBaselinehqGolangSharedTypesVM.from_dict(obj["vm"]) if obj.get("vm") is not None else None
         })
         return _obj
