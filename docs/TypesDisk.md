@@ -7,11 +7,12 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **availability_zone** | **str** |  | [optional] 
 **capacity_gb** | **float** |  | [optional] 
+**fallback_to_base_pricing** | **bool** |  | [optional] 
 **id** | **str** |  | [optional] 
 **iops** | **float** |  | [optional] 
 **provider** | [**GithubComBaselinehqGolangSharedTypesProvider**](GithubComBaselinehqGolangSharedTypesProvider.md) |  | [optional] 
 **region** | **str** |  | [optional] 
-**service** | [**GithubComBaselinehqGolangSharedTypesService**](GithubComBaselinehqGolangSharedTypesService.md) |  | [optional] 
+**service** | [**TypesService**](TypesService.md) |  | [optional] 
 **throughput_mbps** | **float** |  | [optional] 
 **type** | **str** |  | [optional] 
 **usage_type** | [**GithubComBaselinehqGolangSharedTypesUsageType**](GithubComBaselinehqGolangSharedTypesUsageType.md) |  | [optional] 
