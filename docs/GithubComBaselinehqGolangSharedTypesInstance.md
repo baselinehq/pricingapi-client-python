@@ -6,14 +6,14 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **availability_zone** | **str** |  | [optional] 
+**fallback_to_base_pricing** | **bool** |  | [optional] 
 **id** | **str** |  | [optional] 
 **instance_type** | **str** |  | [optional] 
 **operating_system** | **str** |  | [optional] 
 **provider** | [**GithubComBaselinehqGolangSharedTypesProvider**](GithubComBaselinehqGolangSharedTypesProvider.md) |  | [optional] 
 **region** | **str** |  | [optional] 
-**service** | [**GithubComBaselinehqGolangSharedTypesService**](GithubComBaselinehqGolangSharedTypesService.md) |  | [optional] 
+**service** | [**TypesService**](TypesService.md) |  | [optional] 
 **usage_type** | [**GithubComBaselinehqGolangSharedTypesUsageType**](GithubComBaselinehqGolangSharedTypesUsageType.md) |  | [optional] 
-**use_base_pricing** | **bool** |  | [optional] 
 **vm** | [**GithubComBaselinehqGolangSharedTypesVM**](GithubComBaselinehqGolangSharedTypesVM.md) |  | [optional] 
 
 ## Example
