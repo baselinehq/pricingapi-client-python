@@ -1,6 +1,9 @@
 name: Release Please
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
@@ -14,10 +17,10 @@ concurrency:
 
 jobs:
   release:
-    runs-on: ubicloud-standard-4
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     steps:
       - uses: googleapis/release-please-action@5c625bfb5d1ff62eadeeb3772007f7f66fdcf071 # v4
         with:
-          token: ${{ secrets.GO_GET_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
