@@ -36,6 +36,8 @@ class TestComputeRecommendation(unittest.TestCase):
         model = ComputeRecommendation()
         if include_optional:
             return ComputeRecommendation(
+                cost_per_work_unit = 1.337,
+                cpu_class = '',
                 pricing = pricing_api_client.models.compute_price.ComputePrice(
                     architecture = '', 
                     availability_zone = '', 
@@ -57,6 +59,7 @@ class TestComputeRecommendation(unittest.TestCase):
                     ram_gb_cost_per_hour = 1.337, 
                     raw_pricing_data = pricing_api_client.models.raw_pricing_data.raw_pricing_data(), 
                     region = '', 
+                    resizable = True, 
                     service = '', 
                     tags = pricing_api_client.models.tags.tags(), 
                     updated_at = '', 
@@ -65,7 +68,8 @@ class TestComputeRecommendation(unittest.TestCase):
                     amount_per_hour = 1.337, 
                     amount_per_month = 1.337, 
                     amount_per_year = 1.337, 
-                    percentage = 1.337, )
+                    percentage = 1.337, ),
+                work_unit = ''
             )
         else:
             return ComputeRecommendation(

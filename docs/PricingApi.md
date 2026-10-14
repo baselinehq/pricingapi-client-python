@@ -9,7 +9,7 @@ Method | HTTP request | Description
 
 
 # **v1_pricing_compute_post**
-> ComputePrice v1_pricing_compute_post(instance)
+> ComputePrice v1_pricing_compute_post(instance, persist=persist)
 
 Price a machine
 
@@ -56,10 +56,11 @@ with pricing_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = pricing_api_client.PricingApi(api_client)
     instance = pricing_api_client.Instance() # Instance | Machine to price
+    persist = True # bool | Save a price computed for a shape the catalogue does not list, so later lookups return the same row. Defaults to true; false returns the same price without saving it. (optional)
 
     try:
         # Price a machine
-        api_response = api_instance.v1_pricing_compute_post(instance)
+        api_response = api_instance.v1_pricing_compute_post(instance, persist=persist)
         print("The response of PricingApi->v1_pricing_compute_post:\n")
         pprint(api_response)
     except Exception as e:
@@ -74,6 +75,7 @@ with pricing_api_client.ApiClient(configuration) as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **instance** | [**Instance**](Instance.md)| Machine to price | 
+ **persist** | **bool**| Save a price computed for a shape the catalogue does not list, so later lookups return the same row. Defaults to true; false returns the same price without saving it. | [optional] 
 
 ### Return type
 

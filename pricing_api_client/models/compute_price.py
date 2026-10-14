@@ -18,7 +18,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, StrictFloat, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictFloat, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from typing import Optional, Set
 from typing_extensions import Self
@@ -30,29 +30,30 @@ class ComputePrice(BaseModel):
     """ # noqa: E501
     architecture: Optional[StrictStr] = None
     availability_zone: Optional[StrictStr] = None
-    cost_per_hour: Optional[Union[StrictFloat, StrictInt]] = None
+    cost_per_hour: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="On-demand-equivalent hourly USD; multiply by provider_pricing_rules.month_hours for monthly.")
     cpu_cores: Optional[Union[StrictFloat, StrictInt]] = None
     cpu_cores_cost_per_hour: Optional[Union[StrictFloat, StrictInt]] = None
     created_at: Optional[StrictStr] = None
-    currency: Optional[StrictStr] = None
+    currency: Optional[StrictStr] = Field(default=None, description="Currency the provider published this price in. Cost columns are always normalized USD.")
     gpu_cost_per_hour: Optional[Union[StrictFloat, StrictInt]] = None
     gpu_count: Optional[Union[StrictFloat, StrictInt]] = None
     gpu_type: Optional[StrictStr] = None
     id: Optional[StrictStr] = None
     instance_type: Optional[StrictStr] = None
-    native_cost_per_hour: Optional[Union[StrictFloat, StrictInt]] = None
+    native_cost_per_hour: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="cost_per_hour as published, before FX normalization. Zero when currency is USD.")
     operating_system: Optional[StrictStr] = None
-    period_billing_hours: Optional[Union[StrictFloat, StrictInt]] = None
+    period_billing_hours: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="Commitment term the raw price covers: 1=hourly on-demand; 8640/25920/43200=1mo/3mo/1yr buckets. cost_per_hour is already normalized to hourly.")
     provider: Optional[StrictStr] = None
     ram_gb: Optional[Union[StrictFloat, StrictInt]] = None
     ram_gb_cost_per_hour: Optional[Union[StrictFloat, StrictInt]] = None
     raw_pricing_data: Optional[Dict[str, Any]] = None
     region: Optional[StrictStr] = None
+    resizable: Optional[StrictBool] = Field(default=None, description="True when the row carries per-vCPU and per-GB rates for a shape sized at launch; resolution stores and returns a row priced at the requested vCPU and memory. NULL or false is a fixed-size shape.")
     service: Optional[StrictStr] = None
     tags: Optional[Dict[str, Any]] = None
     updated_at: Optional[StrictStr] = None
-    usage_type: Optional[StrictStr] = None
-    __properties: ClassVar[List[str]] = ["architecture", "availability_zone", "cost_per_hour", "cpu_cores", "cpu_cores_cost_per_hour", "created_at", "currency", "gpu_cost_per_hour", "gpu_count", "gpu_type", "id", "instance_type", "native_cost_per_hour", "operating_system", "period_billing_hours", "provider", "ram_gb", "ram_gb_cost_per_hour", "raw_pricing_data", "region", "service", "tags", "updated_at", "usage_type"]
+    usage_type: Optional[StrictStr] = Field(default=None, description="Pricing tier token (ONDEMAND, RESERVED, SPOT_*, *_HBP, *_BYOL, Commit1Yr/3Yr). Filter to ONDEMAND for normal pricing.")
+    __properties: ClassVar[List[str]] = ["architecture", "availability_zone", "cost_per_hour", "cpu_cores", "cpu_cores_cost_per_hour", "created_at", "currency", "gpu_cost_per_hour", "gpu_count", "gpu_type", "id", "instance_type", "native_cost_per_hour", "operating_system", "period_billing_hours", "provider", "ram_gb", "ram_gb_cost_per_hour", "raw_pricing_data", "region", "resizable", "service", "tags", "updated_at", "usage_type"]
 
     model_config = ConfigDict(
         validate_by_name=True,
@@ -93,6 +94,11 @@ class ComputePrice(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # set to None if resizable (nullable) is None
+        # and model_fields_set contains the field
+        if self.resizable is None and "resizable" in self.model_fields_set:
+            _dict['resizable'] = None
+
         return _dict
 
     @classmethod
@@ -125,6 +131,7 @@ class ComputePrice(BaseModel):
             "ram_gb_cost_per_hour": obj.get("ram_gb_cost_per_hour"),
             "raw_pricing_data": obj.get("raw_pricing_data"),
             "region": obj.get("region"),
+            "resizable": obj.get("resizable"),
             "service": obj.get("service"),
             "tags": obj.get("tags"),
             "updated_at": obj.get("updated_at"),

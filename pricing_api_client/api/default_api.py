@@ -16,7 +16,7 @@ from pydantic import validate_call, Field, StrictFloat, StrictStr, StrictInt
 from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 
-from pydantic import Field, StrictInt, StrictStr
+from pydantic import Field, StrictBool, StrictInt, StrictStr, field_validator
 from typing import Dict, List, Optional
 from typing_extensions import Annotated
 from pricing_api_client.models.compute_price import ComputePrice
@@ -365,7 +365,9 @@ class DefaultApi:
             '200': "RegisteredComputePrices",
             '400': "ErrorResponse",
             '401': "ErrorResponse",
+            '403': "ErrorResponse",
             '404': "ErrorResponse",
+            '409': "Problem",
             '500': "ErrorResponse",
         }
         response_data = self.api_client.call_api(
@@ -437,7 +439,9 @@ class DefaultApi:
             '200': "RegisteredComputePrices",
             '400': "ErrorResponse",
             '401': "ErrorResponse",
+            '403': "ErrorResponse",
             '404': "ErrorResponse",
+            '409': "Problem",
             '500': "ErrorResponse",
         }
         response_data = self.api_client.call_api(
@@ -509,7 +513,9 @@ class DefaultApi:
             '200': "RegisteredComputePrices",
             '400': "ErrorResponse",
             '401': "ErrorResponse",
+            '403': "ErrorResponse",
             '404': "ErrorResponse",
+            '409': "Problem",
             '500': "ErrorResponse",
         }
         response_data = self.api_client.call_api(
@@ -664,6 +670,7 @@ class DefaultApi:
             '200': "ComputePriceList",
             '400': "ErrorResponse",
             '401': "ErrorResponse",
+            '403': "ErrorResponse",
             '500': "ErrorResponse",
         }
         response_data = self.api_client.call_api(
@@ -755,6 +762,7 @@ class DefaultApi:
             '200': "ComputePriceList",
             '400': "ErrorResponse",
             '401': "ErrorResponse",
+            '403': "ErrorResponse",
             '500': "ErrorResponse",
         }
         response_data = self.api_client.call_api(
@@ -846,6 +854,7 @@ class DefaultApi:
             '200': "ComputePriceList",
             '400': "ErrorResponse",
             '401': "ErrorResponse",
+            '403': "ErrorResponse",
             '500': "ErrorResponse",
         }
         response_data = self.api_client.call_api(
@@ -966,7 +975,7 @@ class DefaultApi:
     ) -> RegisteredComputePrices:
         """(Deprecated) Register a custom provider
 
-        Register your own compute rates so CostGraph can price machines it has no public price for, such as bare metal or a private cloud. An entry is upserted on its natural key (provider, service, region, availability zone, usage type, instance type, operating system and period billing hours), so re-posting the same entry with a new cost keeps its id and reprices everything already using it. Changing any key field mints a new id, because it describes a different SKU. The returned id is what you attach to a resource with the `costgraph.ai/pricing-id.compute` label or tag. Treat it as a secret you hand out deliberately: anyone holding it can pin to the rate, which is how a provider prices clusters it sells on. Superseded by POST /v1/marketplace/compute, which returns RFC 9457 problem responses on failure.
+        Register your own compute rates so CostGraph can price machines it has no public price for, such as bare metal or a private cloud. Send either `cost_per_hour` or the per-resource rates (`cpu_cores_cost_per_hour`, `ram_gb_cost_per_hour`, `gpu_cost_per_hour`) and the other is derived; send both and they must agree within 0.1%. GPU cost is taken out of `cost_per_hour` before the rest is split across cpu and memory. A `cost_per_hour` of 0, or cpu and memory rates that are both 0, count as not sent. `service`, `region`, `cpu_cores`, `ram_gb` and `period_billing_hours` (1 for an hourly price) are required. An entry is upserted on its natural key (provider, service, region, availability zone, usage type, instance type, operating system and period billing hours), so re-posting the same entry with a new cost keeps its id and reprices everything already using it. Changing any key field mints a new id, because it describes a different SKU. The returned id is what you attach to a resource with the `costgraph.ai/pricing-id.compute` label or tag. Treat it as a secret you hand out deliberately: anyone holding it can pin to the rate, which is how a provider prices clusters it sells on. Superseded by POST /v1/marketplace/compute, which returns RFC 9457 problem responses on failure.
 
         :param instance: Custom pricing request (required)
         :type instance: ComputePricesRequest
@@ -1005,6 +1014,7 @@ class DefaultApi:
             '200': "RegisteredComputePrices",
             '400': "ErrorResponse",
             '401': "ErrorResponse",
+            '403': "ErrorResponse",
             '500': "ErrorResponse",
         }
         response_data = self.api_client.call_api(
@@ -1037,7 +1047,7 @@ class DefaultApi:
     ) -> ApiResponse[RegisteredComputePrices]:
         """(Deprecated) Register a custom provider
 
-        Register your own compute rates so CostGraph can price machines it has no public price for, such as bare metal or a private cloud. An entry is upserted on its natural key (provider, service, region, availability zone, usage type, instance type, operating system and period billing hours), so re-posting the same entry with a new cost keeps its id and reprices everything already using it. Changing any key field mints a new id, because it describes a different SKU. The returned id is what you attach to a resource with the `costgraph.ai/pricing-id.compute` label or tag. Treat it as a secret you hand out deliberately: anyone holding it can pin to the rate, which is how a provider prices clusters it sells on. Superseded by POST /v1/marketplace/compute, which returns RFC 9457 problem responses on failure.
+        Register your own compute rates so CostGraph can price machines it has no public price for, such as bare metal or a private cloud. Send either `cost_per_hour` or the per-resource rates (`cpu_cores_cost_per_hour`, `ram_gb_cost_per_hour`, `gpu_cost_per_hour`) and the other is derived; send both and they must agree within 0.1%. GPU cost is taken out of `cost_per_hour` before the rest is split across cpu and memory. A `cost_per_hour` of 0, or cpu and memory rates that are both 0, count as not sent. `service`, `region`, `cpu_cores`, `ram_gb` and `period_billing_hours` (1 for an hourly price) are required. An entry is upserted on its natural key (provider, service, region, availability zone, usage type, instance type, operating system and period billing hours), so re-posting the same entry with a new cost keeps its id and reprices everything already using it. Changing any key field mints a new id, because it describes a different SKU. The returned id is what you attach to a resource with the `costgraph.ai/pricing-id.compute` label or tag. Treat it as a secret you hand out deliberately: anyone holding it can pin to the rate, which is how a provider prices clusters it sells on. Superseded by POST /v1/marketplace/compute, which returns RFC 9457 problem responses on failure.
 
         :param instance: Custom pricing request (required)
         :type instance: ComputePricesRequest
@@ -1076,6 +1086,7 @@ class DefaultApi:
             '200': "RegisteredComputePrices",
             '400': "ErrorResponse",
             '401': "ErrorResponse",
+            '403': "ErrorResponse",
             '500': "ErrorResponse",
         }
         response_data = self.api_client.call_api(
@@ -1108,7 +1119,7 @@ class DefaultApi:
     ) -> RESTResponseType:
         """(Deprecated) Register a custom provider
 
-        Register your own compute rates so CostGraph can price machines it has no public price for, such as bare metal or a private cloud. An entry is upserted on its natural key (provider, service, region, availability zone, usage type, instance type, operating system and period billing hours), so re-posting the same entry with a new cost keeps its id and reprices everything already using it. Changing any key field mints a new id, because it describes a different SKU. The returned id is what you attach to a resource with the `costgraph.ai/pricing-id.compute` label or tag. Treat it as a secret you hand out deliberately: anyone holding it can pin to the rate, which is how a provider prices clusters it sells on. Superseded by POST /v1/marketplace/compute, which returns RFC 9457 problem responses on failure.
+        Register your own compute rates so CostGraph can price machines it has no public price for, such as bare metal or a private cloud. Send either `cost_per_hour` or the per-resource rates (`cpu_cores_cost_per_hour`, `ram_gb_cost_per_hour`, `gpu_cost_per_hour`) and the other is derived; send both and they must agree within 0.1%. GPU cost is taken out of `cost_per_hour` before the rest is split across cpu and memory. A `cost_per_hour` of 0, or cpu and memory rates that are both 0, count as not sent. `service`, `region`, `cpu_cores`, `ram_gb` and `period_billing_hours` (1 for an hourly price) are required. An entry is upserted on its natural key (provider, service, region, availability zone, usage type, instance type, operating system and period billing hours), so re-posting the same entry with a new cost keeps its id and reprices everything already using it. Changing any key field mints a new id, because it describes a different SKU. The returned id is what you attach to a resource with the `costgraph.ai/pricing-id.compute` label or tag. Treat it as a secret you hand out deliberately: anyone holding it can pin to the rate, which is how a provider prices clusters it sells on. Superseded by POST /v1/marketplace/compute, which returns RFC 9457 problem responses on failure.
 
         :param instance: Custom pricing request (required)
         :type instance: ComputePricesRequest
@@ -1147,6 +1158,7 @@ class DefaultApi:
             '200': "RegisteredComputePrices",
             '400': "ErrorResponse",
             '401': "ErrorResponse",
+            '403': "ErrorResponse",
             '500': "ErrorResponse",
         }
         response_data = self.api_client.call_api(
@@ -1292,6 +1304,7 @@ class DefaultApi:
             '200': "RegisteredDatabasePrices",
             '400': "ErrorResponse",
             '401': "ErrorResponse",
+            '403': "ErrorResponse",
             '404': "ErrorResponse",
             '500': "ErrorResponse",
         }
@@ -1364,6 +1377,7 @@ class DefaultApi:
             '200': "RegisteredDatabasePrices",
             '400': "ErrorResponse",
             '401': "ErrorResponse",
+            '403': "ErrorResponse",
             '404': "ErrorResponse",
             '500': "ErrorResponse",
         }
@@ -1436,6 +1450,7 @@ class DefaultApi:
             '200': "RegisteredDatabasePrices",
             '400': "ErrorResponse",
             '401': "ErrorResponse",
+            '403': "ErrorResponse",
             '404': "ErrorResponse",
             '500': "ErrorResponse",
         }
@@ -1599,6 +1614,7 @@ class DefaultApi:
             '200': "DatabasePriceList",
             '400': "ErrorResponse",
             '401': "ErrorResponse",
+            '403': "ErrorResponse",
             '500': "ErrorResponse",
         }
         response_data = self.api_client.call_api(
@@ -1698,6 +1714,7 @@ class DefaultApi:
             '200': "DatabasePriceList",
             '400': "ErrorResponse",
             '401': "ErrorResponse",
+            '403': "ErrorResponse",
             '500': "ErrorResponse",
         }
         response_data = self.api_client.call_api(
@@ -1797,6 +1814,7 @@ class DefaultApi:
             '200': "DatabasePriceList",
             '400': "ErrorResponse",
             '401': "ErrorResponse",
+            '403': "ErrorResponse",
             '500': "ErrorResponse",
         }
         response_data = self.api_client.call_api(
@@ -1927,7 +1945,7 @@ class DefaultApi:
     ) -> RegisteredDatabasePrices:
         """(Deprecated) Register custom database pricing
 
-        Register your own managed database rates, keyed by engine, edition, deployment option, storage type and instance type alongside the usual provider, service and region. An entry is upserted on the full natural key (provider, service, region, availability zone, usage type, engine, edition, deployment option, billing config, storage type, instance type, architecture and period billing hours), so re-posting with a new cost keeps its id; changing any key field mints a new one. The returned id is what you attach with the `costgraph.ai/pricing-id.database` label or tag. Superseded by POST /v1/marketplace/databases, which returns RFC 9457 problem responses on failure.
+        Register your own managed database rates, keyed by engine, edition, deployment option, storage type and instance type alongside the usual provider, service and region. Send either `cost_per_hour` or the cpu and memory rates and the other is derived; send both and they must agree within 0.1%. A database without `cpu_cores` or `ram_gb`, such as a serverless one, needs no rates and only at least one price of any kind. `service`, `region`, `engine` and `period_billing_hours` (1 for an hourly price) are required. An entry is upserted on the full natural key (provider, service, region, availability zone, usage type, engine, edition, deployment option, billing config, storage type, instance type, architecture and period billing hours), so re-posting with a new cost keeps its id; changing any key field mints a new one. The returned id is what you attach with the `costgraph.ai/pricing-id.database` label or tag. Superseded by POST /v1/marketplace/databases, which returns RFC 9457 problem responses on failure.
 
         :param instance: Custom database pricing request (required)
         :type instance: DatabasePricesRequest
@@ -1966,6 +1984,7 @@ class DefaultApi:
             '200': "RegisteredDatabasePrices",
             '400': "ErrorResponse",
             '401': "ErrorResponse",
+            '403': "ErrorResponse",
             '500': "ErrorResponse",
         }
         response_data = self.api_client.call_api(
@@ -1998,7 +2017,7 @@ class DefaultApi:
     ) -> ApiResponse[RegisteredDatabasePrices]:
         """(Deprecated) Register custom database pricing
 
-        Register your own managed database rates, keyed by engine, edition, deployment option, storage type and instance type alongside the usual provider, service and region. An entry is upserted on the full natural key (provider, service, region, availability zone, usage type, engine, edition, deployment option, billing config, storage type, instance type, architecture and period billing hours), so re-posting with a new cost keeps its id; changing any key field mints a new one. The returned id is what you attach with the `costgraph.ai/pricing-id.database` label or tag. Superseded by POST /v1/marketplace/databases, which returns RFC 9457 problem responses on failure.
+        Register your own managed database rates, keyed by engine, edition, deployment option, storage type and instance type alongside the usual provider, service and region. Send either `cost_per_hour` or the cpu and memory rates and the other is derived; send both and they must agree within 0.1%. A database without `cpu_cores` or `ram_gb`, such as a serverless one, needs no rates and only at least one price of any kind. `service`, `region`, `engine` and `period_billing_hours` (1 for an hourly price) are required. An entry is upserted on the full natural key (provider, service, region, availability zone, usage type, engine, edition, deployment option, billing config, storage type, instance type, architecture and period billing hours), so re-posting with a new cost keeps its id; changing any key field mints a new one. The returned id is what you attach with the `costgraph.ai/pricing-id.database` label or tag. Superseded by POST /v1/marketplace/databases, which returns RFC 9457 problem responses on failure.
 
         :param instance: Custom database pricing request (required)
         :type instance: DatabasePricesRequest
@@ -2037,6 +2056,7 @@ class DefaultApi:
             '200': "RegisteredDatabasePrices",
             '400': "ErrorResponse",
             '401': "ErrorResponse",
+            '403': "ErrorResponse",
             '500': "ErrorResponse",
         }
         response_data = self.api_client.call_api(
@@ -2069,7 +2089,7 @@ class DefaultApi:
     ) -> RESTResponseType:
         """(Deprecated) Register custom database pricing
 
-        Register your own managed database rates, keyed by engine, edition, deployment option, storage type and instance type alongside the usual provider, service and region. An entry is upserted on the full natural key (provider, service, region, availability zone, usage type, engine, edition, deployment option, billing config, storage type, instance type, architecture and period billing hours), so re-posting with a new cost keeps its id; changing any key field mints a new one. The returned id is what you attach with the `costgraph.ai/pricing-id.database` label or tag. Superseded by POST /v1/marketplace/databases, which returns RFC 9457 problem responses on failure.
+        Register your own managed database rates, keyed by engine, edition, deployment option, storage type and instance type alongside the usual provider, service and region. Send either `cost_per_hour` or the cpu and memory rates and the other is derived; send both and they must agree within 0.1%. A database without `cpu_cores` or `ram_gb`, such as a serverless one, needs no rates and only at least one price of any kind. `service`, `region`, `engine` and `period_billing_hours` (1 for an hourly price) are required. An entry is upserted on the full natural key (provider, service, region, availability zone, usage type, engine, edition, deployment option, billing config, storage type, instance type, architecture and period billing hours), so re-posting with a new cost keeps its id; changing any key field mints a new one. The returned id is what you attach with the `costgraph.ai/pricing-id.database` label or tag. Superseded by POST /v1/marketplace/databases, which returns RFC 9457 problem responses on failure.
 
         :param instance: Custom database pricing request (required)
         :type instance: DatabasePricesRequest
@@ -2108,6 +2128,7 @@ class DefaultApi:
             '200': "RegisteredDatabasePrices",
             '400': "ErrorResponse",
             '401': "ErrorResponse",
+            '403': "ErrorResponse",
             '500': "ErrorResponse",
         }
         response_data = self.api_client.call_api(
@@ -2253,7 +2274,9 @@ class DefaultApi:
             '200': "RegisteredDiskPrices",
             '400': "ErrorResponse",
             '401': "ErrorResponse",
+            '403': "ErrorResponse",
             '404': "ErrorResponse",
+            '409': "Problem",
             '500': "ErrorResponse",
         }
         response_data = self.api_client.call_api(
@@ -2325,7 +2348,9 @@ class DefaultApi:
             '200': "RegisteredDiskPrices",
             '400': "ErrorResponse",
             '401': "ErrorResponse",
+            '403': "ErrorResponse",
             '404': "ErrorResponse",
+            '409': "Problem",
             '500': "ErrorResponse",
         }
         response_data = self.api_client.call_api(
@@ -2397,7 +2422,9 @@ class DefaultApi:
             '200': "RegisteredDiskPrices",
             '400': "ErrorResponse",
             '401': "ErrorResponse",
+            '403': "ErrorResponse",
             '404': "ErrorResponse",
+            '409': "Problem",
             '500': "ErrorResponse",
         }
         response_data = self.api_client.call_api(
@@ -2552,6 +2579,7 @@ class DefaultApi:
             '200': "DiskPriceList",
             '400': "ErrorResponse",
             '401': "ErrorResponse",
+            '403': "ErrorResponse",
             '500': "ErrorResponse",
         }
         response_data = self.api_client.call_api(
@@ -2643,6 +2671,7 @@ class DefaultApi:
             '200': "DiskPriceList",
             '400': "ErrorResponse",
             '401': "ErrorResponse",
+            '403': "ErrorResponse",
             '500': "ErrorResponse",
         }
         response_data = self.api_client.call_api(
@@ -2734,6 +2763,7 @@ class DefaultApi:
             '200': "DiskPriceList",
             '400': "ErrorResponse",
             '401': "ErrorResponse",
+            '403': "ErrorResponse",
             '500': "ErrorResponse",
         }
         response_data = self.api_client.call_api(
@@ -2893,6 +2923,7 @@ class DefaultApi:
             '200': "RegisteredDiskPrices",
             '400': "ErrorResponse",
             '401': "ErrorResponse",
+            '403': "ErrorResponse",
             '500': "ErrorResponse",
         }
         response_data = self.api_client.call_api(
@@ -2964,6 +2995,7 @@ class DefaultApi:
             '200': "RegisteredDiskPrices",
             '400': "ErrorResponse",
             '401': "ErrorResponse",
+            '403': "ErrorResponse",
             '500': "ErrorResponse",
         }
         response_data = self.api_client.call_api(
@@ -3035,6 +3067,7 @@ class DefaultApi:
             '200': "RegisteredDiskPrices",
             '400': "ErrorResponse",
             '401': "ErrorResponse",
+            '403': "ErrorResponse",
             '500': "ErrorResponse",
         }
         response_data = self.api_client.call_api(
@@ -3180,6 +3213,7 @@ class DefaultApi:
             '200': "RegisteredModelPrices",
             '400': "ErrorResponse",
             '401': "ErrorResponse",
+            '403': "ErrorResponse",
             '404': "ErrorResponse",
             '500': "ErrorResponse",
         }
@@ -3252,6 +3286,7 @@ class DefaultApi:
             '200': "RegisteredModelPrices",
             '400': "ErrorResponse",
             '401': "ErrorResponse",
+            '403': "ErrorResponse",
             '404': "ErrorResponse",
             '500': "ErrorResponse",
         }
@@ -3324,6 +3359,7 @@ class DefaultApi:
             '200': "RegisteredModelPrices",
             '400': "ErrorResponse",
             '401': "ErrorResponse",
+            '403': "ErrorResponse",
             '404': "ErrorResponse",
             '500': "ErrorResponse",
         }
@@ -3409,7 +3445,7 @@ class DefaultApi:
         model: Annotated[Optional[StrictStr], Field(description="Filter by model")] = None,
         provider: Annotated[Optional[StrictStr], Field(description="Filter by model provider")] = None,
         region: Annotated[Optional[StrictStr], Field(description="Filter by region")] = None,
-        token_bucket: Annotated[Optional[StrictStr], Field(description="Filter by token bucket")] = None,
+        token_bucket: Annotated[Optional[StrictStr], Field(description="Filter by token bucket. Every bucket is priced separately, so a model has one price per bucket")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -3437,7 +3473,7 @@ class DefaultApi:
         :type provider: str
         :param region: Filter by region
         :type region: str
-        :param token_bucket: Filter by token bucket
+        :param token_bucket: Filter by token bucket. Every bucket is priced separately, so a model has one price per bucket
         :type token_bucket: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
@@ -3479,6 +3515,7 @@ class DefaultApi:
             '200': "ModelPriceList",
             '400': "ErrorResponse",
             '401': "ErrorResponse",
+            '403': "ErrorResponse",
             '500': "ErrorResponse",
         }
         response_data = self.api_client.call_api(
@@ -3500,7 +3537,7 @@ class DefaultApi:
         model: Annotated[Optional[StrictStr], Field(description="Filter by model")] = None,
         provider: Annotated[Optional[StrictStr], Field(description="Filter by model provider")] = None,
         region: Annotated[Optional[StrictStr], Field(description="Filter by region")] = None,
-        token_bucket: Annotated[Optional[StrictStr], Field(description="Filter by token bucket")] = None,
+        token_bucket: Annotated[Optional[StrictStr], Field(description="Filter by token bucket. Every bucket is priced separately, so a model has one price per bucket")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -3528,7 +3565,7 @@ class DefaultApi:
         :type provider: str
         :param region: Filter by region
         :type region: str
-        :param token_bucket: Filter by token bucket
+        :param token_bucket: Filter by token bucket. Every bucket is priced separately, so a model has one price per bucket
         :type token_bucket: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
@@ -3570,6 +3607,7 @@ class DefaultApi:
             '200': "ModelPriceList",
             '400': "ErrorResponse",
             '401': "ErrorResponse",
+            '403': "ErrorResponse",
             '500': "ErrorResponse",
         }
         response_data = self.api_client.call_api(
@@ -3591,7 +3629,7 @@ class DefaultApi:
         model: Annotated[Optional[StrictStr], Field(description="Filter by model")] = None,
         provider: Annotated[Optional[StrictStr], Field(description="Filter by model provider")] = None,
         region: Annotated[Optional[StrictStr], Field(description="Filter by region")] = None,
-        token_bucket: Annotated[Optional[StrictStr], Field(description="Filter by token bucket")] = None,
+        token_bucket: Annotated[Optional[StrictStr], Field(description="Filter by token bucket. Every bucket is priced separately, so a model has one price per bucket")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -3619,7 +3657,7 @@ class DefaultApi:
         :type provider: str
         :param region: Filter by region
         :type region: str
-        :param token_bucket: Filter by token bucket
+        :param token_bucket: Filter by token bucket. Every bucket is priced separately, so a model has one price per bucket
         :type token_bucket: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
@@ -3661,6 +3699,7 @@ class DefaultApi:
             '200': "ModelPriceList",
             '400': "ErrorResponse",
             '401': "ErrorResponse",
+            '403': "ErrorResponse",
             '500': "ErrorResponse",
         }
         response_data = self.api_client.call_api(
@@ -3781,7 +3820,7 @@ class DefaultApi:
     ) -> RegisteredModelPrices:
         """(Deprecated) Register custom model pricing
 
-        Register custom token pricing for models you host. Entries are versioned: a price change closes the current row and opens a new one, so historic spend keeps the rate it was billed at. The returned id is what you attach with the `costgraph.ai/pricing-id.model` label or tag. Each version carries its own id, so read the live entry back after a price change instead of holding on to an earlier one. Superseded by POST /v1/marketplace/models, which returns RFC 9457 problem responses on failure.
+        Register custom token pricing for models you host. Every token bucket is priced separately, so submit one entry per bucket you charge for - `input`, `output`, `cache_read`, `cache_write` - each with its own `unit_price_per_mtok`. A bucket you leave out has no rate, and usage in it resolves to no price rather than to zero. Entries are versioned: a price change closes the current row and opens a new one, so historic spend keeps the rate it was billed at. The returned id is what you attach with the `costgraph.ai/pricing-id.model` label or tag. Each version carries its own id, so read the live entry back after a price change instead of holding on to an earlier one. Superseded by POST /v1/marketplace/models, which returns RFC 9457 problem responses on failure.
 
         :param instance: Custom model pricing request (required)
         :type instance: ModelPricesRequest
@@ -3820,6 +3859,7 @@ class DefaultApi:
             '200': "RegisteredModelPrices",
             '400': "ErrorResponse",
             '401': "ErrorResponse",
+            '403': "ErrorResponse",
             '500': "ErrorResponse",
         }
         response_data = self.api_client.call_api(
@@ -3852,7 +3892,7 @@ class DefaultApi:
     ) -> ApiResponse[RegisteredModelPrices]:
         """(Deprecated) Register custom model pricing
 
-        Register custom token pricing for models you host. Entries are versioned: a price change closes the current row and opens a new one, so historic spend keeps the rate it was billed at. The returned id is what you attach with the `costgraph.ai/pricing-id.model` label or tag. Each version carries its own id, so read the live entry back after a price change instead of holding on to an earlier one. Superseded by POST /v1/marketplace/models, which returns RFC 9457 problem responses on failure.
+        Register custom token pricing for models you host. Every token bucket is priced separately, so submit one entry per bucket you charge for - `input`, `output`, `cache_read`, `cache_write` - each with its own `unit_price_per_mtok`. A bucket you leave out has no rate, and usage in it resolves to no price rather than to zero. Entries are versioned: a price change closes the current row and opens a new one, so historic spend keeps the rate it was billed at. The returned id is what you attach with the `costgraph.ai/pricing-id.model` label or tag. Each version carries its own id, so read the live entry back after a price change instead of holding on to an earlier one. Superseded by POST /v1/marketplace/models, which returns RFC 9457 problem responses on failure.
 
         :param instance: Custom model pricing request (required)
         :type instance: ModelPricesRequest
@@ -3891,6 +3931,7 @@ class DefaultApi:
             '200': "RegisteredModelPrices",
             '400': "ErrorResponse",
             '401': "ErrorResponse",
+            '403': "ErrorResponse",
             '500': "ErrorResponse",
         }
         response_data = self.api_client.call_api(
@@ -3923,7 +3964,7 @@ class DefaultApi:
     ) -> RESTResponseType:
         """(Deprecated) Register custom model pricing
 
-        Register custom token pricing for models you host. Entries are versioned: a price change closes the current row and opens a new one, so historic spend keeps the rate it was billed at. The returned id is what you attach with the `costgraph.ai/pricing-id.model` label or tag. Each version carries its own id, so read the live entry back after a price change instead of holding on to an earlier one. Superseded by POST /v1/marketplace/models, which returns RFC 9457 problem responses on failure.
+        Register custom token pricing for models you host. Every token bucket is priced separately, so submit one entry per bucket you charge for - `input`, `output`, `cache_read`, `cache_write` - each with its own `unit_price_per_mtok`. A bucket you leave out has no rate, and usage in it resolves to no price rather than to zero. Entries are versioned: a price change closes the current row and opens a new one, so historic spend keeps the rate it was billed at. The returned id is what you attach with the `costgraph.ai/pricing-id.model` label or tag. Each version carries its own id, so read the live entry back after a price change instead of holding on to an earlier one. Superseded by POST /v1/marketplace/models, which returns RFC 9457 problem responses on failure.
 
         :param instance: Custom model pricing request (required)
         :type instance: ModelPricesRequest
@@ -3962,6 +4003,7 @@ class DefaultApi:
             '200': "RegisteredModelPrices",
             '400': "ErrorResponse",
             '401': "ErrorResponse",
+            '403': "ErrorResponse",
             '500': "ErrorResponse",
         }
         response_data = self.api_client.call_api(
@@ -4053,6 +4095,7 @@ class DefaultApi:
     def pricing_compute_post(
         self,
         instance: Annotated[Instance, Field(description="Instance")],
+        persist: Annotated[Optional[StrictBool], Field(description="Save a price computed for a shape the catalogue does not list. Defaults to true.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -4072,6 +4115,8 @@ class DefaultApi:
 
         :param instance: Instance (required)
         :type instance: Instance
+        :param persist: Save a price computed for a shape the catalogue does not list. Defaults to true.
+        :type persist: bool
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -4097,6 +4142,7 @@ class DefaultApi:
 
         _param = self._pricing_compute_post_serialize(
             instance=instance,
+            persist=persist,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -4125,6 +4171,7 @@ class DefaultApi:
     def pricing_compute_post_with_http_info(
         self,
         instance: Annotated[Instance, Field(description="Instance")],
+        persist: Annotated[Optional[StrictBool], Field(description="Save a price computed for a shape the catalogue does not list. Defaults to true.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -4144,6 +4191,8 @@ class DefaultApi:
 
         :param instance: Instance (required)
         :type instance: Instance
+        :param persist: Save a price computed for a shape the catalogue does not list. Defaults to true.
+        :type persist: bool
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -4169,6 +4218,7 @@ class DefaultApi:
 
         _param = self._pricing_compute_post_serialize(
             instance=instance,
+            persist=persist,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -4197,6 +4247,7 @@ class DefaultApi:
     def pricing_compute_post_without_preload_content(
         self,
         instance: Annotated[Instance, Field(description="Instance")],
+        persist: Annotated[Optional[StrictBool], Field(description="Save a price computed for a shape the catalogue does not list. Defaults to true.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -4216,6 +4267,8 @@ class DefaultApi:
 
         :param instance: Instance (required)
         :type instance: Instance
+        :param persist: Save a price computed for a shape the catalogue does not list. Defaults to true.
+        :type persist: bool
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -4241,6 +4294,7 @@ class DefaultApi:
 
         _param = self._pricing_compute_post_serialize(
             instance=instance,
+            persist=persist,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -4264,6 +4318,7 @@ class DefaultApi:
     def _pricing_compute_post_serialize(
         self,
         instance,
+        persist,
         _request_auth,
         _content_type,
         _headers,
@@ -4286,6 +4341,10 @@ class DefaultApi:
 
         # process the path parameters
         # process the query parameters
+        if persist is not None:
+            
+            _query_params.append(('persist', persist))
+            
         # process the header parameters
         # process the form parameters
         # process the body parameter
@@ -4633,6 +4692,7 @@ class DefaultApi:
     def pricing_post(
         self,
         instance: Annotated[Instance, Field(description="Instance")],
+        persist: Annotated[Optional[StrictBool], Field(description="Save a price computed for a shape the catalogue does not list. Defaults to true.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -4652,6 +4712,8 @@ class DefaultApi:
 
         :param instance: Instance (required)
         :type instance: Instance
+        :param persist: Save a price computed for a shape the catalogue does not list. Defaults to true.
+        :type persist: bool
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -4677,6 +4739,7 @@ class DefaultApi:
 
         _param = self._pricing_post_serialize(
             instance=instance,
+            persist=persist,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -4705,6 +4768,7 @@ class DefaultApi:
     def pricing_post_with_http_info(
         self,
         instance: Annotated[Instance, Field(description="Instance")],
+        persist: Annotated[Optional[StrictBool], Field(description="Save a price computed for a shape the catalogue does not list. Defaults to true.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -4724,6 +4788,8 @@ class DefaultApi:
 
         :param instance: Instance (required)
         :type instance: Instance
+        :param persist: Save a price computed for a shape the catalogue does not list. Defaults to true.
+        :type persist: bool
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -4749,6 +4815,7 @@ class DefaultApi:
 
         _param = self._pricing_post_serialize(
             instance=instance,
+            persist=persist,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -4777,6 +4844,7 @@ class DefaultApi:
     def pricing_post_without_preload_content(
         self,
         instance: Annotated[Instance, Field(description="Instance")],
+        persist: Annotated[Optional[StrictBool], Field(description="Save a price computed for a shape the catalogue does not list. Defaults to true.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -4796,6 +4864,8 @@ class DefaultApi:
 
         :param instance: Instance (required)
         :type instance: Instance
+        :param persist: Save a price computed for a shape the catalogue does not list. Defaults to true.
+        :type persist: bool
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -4821,6 +4891,7 @@ class DefaultApi:
 
         _param = self._pricing_post_serialize(
             instance=instance,
+            persist=persist,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -4844,6 +4915,7 @@ class DefaultApi:
     def _pricing_post_serialize(
         self,
         instance,
+        persist,
         _request_auth,
         _content_type,
         _headers,
@@ -4866,6 +4938,10 @@ class DefaultApi:
 
         # process the path parameters
         # process the query parameters
+        if persist is not None:
+            
+            _query_params.append(('persist', persist))
+            
         # process the header parameters
         # process the form parameters
         # process the body parameter
@@ -5176,6 +5252,7 @@ class DefaultApi:
     def recommendations_compute_post(
         self,
         instance: Annotated[ComputeRecommendationRequest, Field(description="Instance")],
+        persist: Annotated[Optional[StrictBool], Field(description="Save a price computed for a shape the catalogue does not list. Defaults to true.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -5195,6 +5272,8 @@ class DefaultApi:
 
         :param instance: Instance (required)
         :type instance: ComputeRecommendationRequest
+        :param persist: Save a price computed for a shape the catalogue does not list. Defaults to true.
+        :type persist: bool
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -5220,6 +5299,7 @@ class DefaultApi:
 
         _param = self._recommendations_compute_post_serialize(
             instance=instance,
+            persist=persist,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -5248,6 +5328,7 @@ class DefaultApi:
     def recommendations_compute_post_with_http_info(
         self,
         instance: Annotated[ComputeRecommendationRequest, Field(description="Instance")],
+        persist: Annotated[Optional[StrictBool], Field(description="Save a price computed for a shape the catalogue does not list. Defaults to true.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -5267,6 +5348,8 @@ class DefaultApi:
 
         :param instance: Instance (required)
         :type instance: ComputeRecommendationRequest
+        :param persist: Save a price computed for a shape the catalogue does not list. Defaults to true.
+        :type persist: bool
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -5292,6 +5375,7 @@ class DefaultApi:
 
         _param = self._recommendations_compute_post_serialize(
             instance=instance,
+            persist=persist,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -5320,6 +5404,7 @@ class DefaultApi:
     def recommendations_compute_post_without_preload_content(
         self,
         instance: Annotated[ComputeRecommendationRequest, Field(description="Instance")],
+        persist: Annotated[Optional[StrictBool], Field(description="Save a price computed for a shape the catalogue does not list. Defaults to true.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -5339,6 +5424,8 @@ class DefaultApi:
 
         :param instance: Instance (required)
         :type instance: ComputeRecommendationRequest
+        :param persist: Save a price computed for a shape the catalogue does not list. Defaults to true.
+        :type persist: bool
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -5364,6 +5451,7 @@ class DefaultApi:
 
         _param = self._recommendations_compute_post_serialize(
             instance=instance,
+            persist=persist,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -5387,6 +5475,7 @@ class DefaultApi:
     def _recommendations_compute_post_serialize(
         self,
         instance,
+        persist,
         _request_auth,
         _content_type,
         _headers,
@@ -5409,6 +5498,10 @@ class DefaultApi:
 
         # process the path parameters
         # process the query parameters
+        if persist is not None:
+            
+            _query_params.append(('persist', persist))
+            
         # process the header parameters
         # process the form parameters
         # process the body parameter
@@ -5756,6 +5849,7 @@ class DefaultApi:
     def recommendations_post(
         self,
         instance: Annotated[ComputeRecommendationRequest, Field(description="Instance")],
+        persist: Annotated[Optional[StrictBool], Field(description="Save a price computed for a shape the catalogue does not list. Defaults to true.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -5775,6 +5869,8 @@ class DefaultApi:
 
         :param instance: Instance (required)
         :type instance: ComputeRecommendationRequest
+        :param persist: Save a price computed for a shape the catalogue does not list. Defaults to true.
+        :type persist: bool
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -5800,6 +5896,7 @@ class DefaultApi:
 
         _param = self._recommendations_post_serialize(
             instance=instance,
+            persist=persist,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -5828,6 +5925,7 @@ class DefaultApi:
     def recommendations_post_with_http_info(
         self,
         instance: Annotated[ComputeRecommendationRequest, Field(description="Instance")],
+        persist: Annotated[Optional[StrictBool], Field(description="Save a price computed for a shape the catalogue does not list. Defaults to true.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -5847,6 +5945,8 @@ class DefaultApi:
 
         :param instance: Instance (required)
         :type instance: ComputeRecommendationRequest
+        :param persist: Save a price computed for a shape the catalogue does not list. Defaults to true.
+        :type persist: bool
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -5872,6 +5972,7 @@ class DefaultApi:
 
         _param = self._recommendations_post_serialize(
             instance=instance,
+            persist=persist,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -5900,6 +6001,7 @@ class DefaultApi:
     def recommendations_post_without_preload_content(
         self,
         instance: Annotated[ComputeRecommendationRequest, Field(description="Instance")],
+        persist: Annotated[Optional[StrictBool], Field(description="Save a price computed for a shape the catalogue does not list. Defaults to true.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -5919,6 +6021,8 @@ class DefaultApi:
 
         :param instance: Instance (required)
         :type instance: ComputeRecommendationRequest
+        :param persist: Save a price computed for a shape the catalogue does not list. Defaults to true.
+        :type persist: bool
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -5944,6 +6048,7 @@ class DefaultApi:
 
         _param = self._recommendations_post_serialize(
             instance=instance,
+            persist=persist,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -5967,6 +6072,7 @@ class DefaultApi:
     def _recommendations_post_serialize(
         self,
         instance,
+        persist,
         _request_auth,
         _content_type,
         _headers,
@@ -5989,6 +6095,10 @@ class DefaultApi:
 
         # process the path parameters
         # process the query parameters
+        if persist is not None:
+            
+            _query_params.append(('persist', persist))
+            
         # process the header parameters
         # process the form parameters
         # process the body parameter

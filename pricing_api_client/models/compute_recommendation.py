@@ -18,8 +18,8 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict
-from typing import Any, ClassVar, Dict, List, Optional
+from pydantic import BaseModel, ConfigDict, StrictFloat, StrictInt, StrictStr
+from typing import Any, ClassVar, Dict, List, Optional, Union
 from pricing_api_client.models.compute_price import ComputePrice
 from pricing_api_client.models.types_savings import TypesSavings
 from typing import Optional, Set
@@ -30,9 +30,12 @@ class ComputeRecommendation(BaseModel):
     """
     ComputeRecommendation
     """ # noqa: E501
+    cost_per_work_unit: Optional[Union[StrictFloat, StrictInt]] = None
+    cpu_class: Optional[StrictStr] = None
     pricing: Optional[ComputePrice] = None
     savings: Optional[TypesSavings] = None
-    __properties: ClassVar[List[str]] = ["pricing", "savings"]
+    work_unit: Optional[StrictStr] = None
+    __properties: ClassVar[List[str]] = ["cost_per_work_unit", "cpu_class", "pricing", "savings", "work_unit"]
 
     model_config = ConfigDict(
         validate_by_name=True,
@@ -91,8 +94,11 @@ class ComputeRecommendation(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
+            "cost_per_work_unit": obj.get("cost_per_work_unit"),
+            "cpu_class": obj.get("cpu_class"),
             "pricing": ComputePrice.from_dict(obj["pricing"]) if obj.get("pricing") is not None else None,
-            "savings": TypesSavings.from_dict(obj["savings"]) if obj.get("savings") is not None else None
+            "savings": TypesSavings.from_dict(obj["savings"]) if obj.get("savings") is not None else None,
+            "work_unit": obj.get("work_unit")
         })
         return _obj
 

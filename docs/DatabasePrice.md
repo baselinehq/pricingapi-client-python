@@ -19,7 +19,7 @@ Name | Type | Description | Notes
 **cpu_cores** | **float** |  | [optional] 
 **cpu_cores_cost_per_hour** | **float** |  | [optional] 
 **created_at** | **str** |  | [optional] 
-**currency** | **str** |  | [optional] 
+**currency** | **str** | Currency the provider published this price in. Cost columns are always normalized USD. | [optional] 
 **deployment_option** | **str** |  | [optional] 
 **edition** | **str** |  | [optional] 
 **engine** | **str** |  | [optional] 

@@ -20,6 +20,7 @@ import json
 
 from pydantic import BaseModel, ConfigDict, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
+from pricing_api_client.models.affected_resource import AffectedResource
 from pricing_api_client.models.field_error import FieldError
 from typing import Optional, Set
 from typing_extensions import Self
@@ -29,6 +30,7 @@ class Problem(BaseModel):
     """
     Problem
     """ # noqa: E501
+    affected: Optional[List[AffectedResource]] = None
     code: Optional[StrictStr] = None
     detail: Optional[StrictStr] = None
     errors: Optional[List[FieldError]] = None
@@ -36,7 +38,7 @@ class Problem(BaseModel):
     status: Optional[StrictInt] = None
     title: Optional[StrictStr] = None
     type: Optional[StrictStr] = None
-    __properties: ClassVar[List[str]] = ["code", "detail", "errors", "instance", "status", "title", "type"]
+    __properties: ClassVar[List[str]] = ["affected", "code", "detail", "errors", "instance", "status", "title", "type"]
 
     model_config = ConfigDict(
         validate_by_name=True,
@@ -77,6 +79,12 @@ class Problem(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of each item in affected (list)
+        _items = []
+        if self.affected:
+            for _item_affected in self.affected:
+                _items.append(_item_affected.to_dict() if _item_affected is not None else None)
+            _dict['affected'] = _items
         # override the default output from pydantic by calling `to_dict()` of each item in errors (list)
         _items = []
         if self.errors:
@@ -95,6 +103,7 @@ class Problem(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
+            "affected": [AffectedResource.from_dict(_item) for _item in obj["affected"]] if obj.get("affected") is not None else None,
             "code": obj.get("code"),
             "detail": obj.get("detail"),
             "errors": [FieldError.from_dict(_item) for _item in obj["errors"]] if obj.get("errors") is not None else None,

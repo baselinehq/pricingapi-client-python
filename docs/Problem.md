@@ -5,6 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**affected** | [**List[AffectedResource]**](AffectedResource.md) |  | [optional] 
 **code** | **str** |  | [optional] 
 **detail** | **str** |  | [optional] 
 **errors** | [**List[FieldError]**](FieldError.md) |  | [optional] 

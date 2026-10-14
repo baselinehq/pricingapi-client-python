@@ -131,11 +131,13 @@ Class | Method | HTTP request | Description
 *ProvidersApi* | [**v1_providers_get**](docs/ProvidersApi.md#v1_providers_get) | **GET** /v1/providers | List the providers CostGraph prices
 *RecommendationsApi* | [**v1_recommendations_compute_post**](docs/RecommendationsApi.md#v1_recommendations_compute_post) | **POST** /v1/recommendations/compute | Find cheaper machines
 *RecommendationsApi* | [**v1_recommendations_disks_post**](docs/RecommendationsApi.md#v1_recommendations_disks_post) | **POST** /v1/recommendations/disks | Find cheaper volumes
+*RecommendationsApi* | [**v1_recommendations_runner_post**](docs/RecommendationsApi.md#v1_recommendations_runner_post) | **POST** /v1/recommendations/runner | Find cheaper CI runners
 *ServiceApi* | [**v1_healthz_get**](docs/ServiceApi.md#v1_healthz_get) | **GET** /v1/healthz | Check the service is live
 
 
 ## Documentation For Models
 
+ - [AffectedResource](docs/AffectedResource.md)
  - [ComputePrice](docs/ComputePrice.md)
  - [ComputePriceList](docs/ComputePriceList.md)
  - [ComputePricePage](docs/ComputePricePage.md)
@@ -177,8 +179,14 @@ Class | Method | HTTP request | Description
  - [RegisteredDiskPrices](docs/RegisteredDiskPrices.md)
  - [RegisteredModelPrices](docs/RegisteredModelPrices.md)
  - [RegistrationStatus](docs/RegistrationStatus.md)
+ - [RunnerRecommendation](docs/RunnerRecommendation.md)
+ - [RunnerRecommendationRequest](docs/RunnerRecommendationRequest.md)
  - [TypesDisk](docs/TypesDisk.md)
  - [TypesPredicates](docs/TypesPredicates.md)
+ - [TypesRunnerCurrent](docs/TypesRunnerCurrent.md)
+ - [TypesRunnerPlanFee](docs/TypesRunnerPlanFee.md)
+ - [TypesRunnerSelfHosted](docs/TypesRunnerSelfHosted.md)
+ - [TypesRunnerShape](docs/TypesRunnerShape.md)
  - [TypesSavings](docs/TypesSavings.md)
  - [TypesService](docs/TypesService.md)
 

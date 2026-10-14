@@ -18,7 +18,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, StrictBool, StrictFloat, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, StrictBool, StrictFloat, StrictInt, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from typing import Optional, Set
 from typing_extensions import Self
@@ -55,6 +55,16 @@ class ModelPrice(BaseModel):
     tool_call: Optional[StrictBool] = None
     unit_price_per_mtok: Optional[Union[StrictFloat, StrictInt]] = None
     __properties: ClassVar[List[str]] = ["context_limit", "currency", "effective_from", "effective_to", "fetched_at", "host", "id", "modalities_input", "modalities_output", "model", "model_id", "open_weights", "output_limit", "provider", "publisher", "raw_pricing_data", "reasoning", "region", "sku_price_id", "source", "source_url", "structured_output", "tags", "token_bucket", "tool_call", "unit_price_per_mtok"]
+
+    @field_validator('token_bucket')
+    def token_bucket_validate_enum(cls, value):
+        """Validates the enum"""
+        if value is None:
+            return value
+
+        if value not in set(['input', 'output', 'cache_read', 'cache_write']):
+            raise ValueError("must be one of enum values ('input', 'output', 'cache_read', 'cache_write')")
+        return value
 
     model_config = ConfigDict(
         validate_by_name=True,

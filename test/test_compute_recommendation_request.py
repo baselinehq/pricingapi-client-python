@@ -69,6 +69,8 @@ class TestComputeRecommendationRequest(unittest.TestCase):
                     regions = [
                         ''
                         ], 
+                    same_architecture = True, 
+                    same_continent = True, 
                     services = [
                         ''
                         ], 
@@ -77,7 +79,8 @@ class TestComputeRecommendationRequest(unittest.TestCase):
                         ], ),
                 usage = pricing_api_client.models.github_com_baselinehq_golang_shared_types/vm.github_com_baselinehq_golang-shared_types.VM(
                     cpu_cores = 1.337, 
-                    ram_gb = 1.337, )
+                    ram_gb = 1.337, ),
+                workload_class = ''
             )
         else:
             return ComputeRecommendationRequest(

@@ -34,6 +34,7 @@ __all__ = [
     "ApiKeyError",
     "ApiAttributeError",
     "ApiException",
+    "AffectedResource",
     "ComputePrice",
     "ComputePriceList",
     "ComputePricePage",
@@ -75,8 +76,14 @@ __all__ = [
     "RegisteredDiskPrices",
     "RegisteredModelPrices",
     "RegistrationStatus",
+    "RunnerRecommendation",
+    "RunnerRecommendationRequest",
     "TypesDisk",
     "TypesPredicates",
+    "TypesRunnerCurrent",
+    "TypesRunnerPlanFee",
+    "TypesRunnerSelfHosted",
+    "TypesRunnerShape",
     "TypesSavings",
     "TypesService",
 ]
@@ -101,6 +108,7 @@ from pricing_api_client.exceptions import ApiAttributeError as ApiAttributeError
 from pricing_api_client.exceptions import ApiException as ApiException
 
 # import models into sdk package
+from pricing_api_client.models.affected_resource import AffectedResource as AffectedResource
 from pricing_api_client.models.compute_price import ComputePrice as ComputePrice
 from pricing_api_client.models.compute_price_list import ComputePriceList as ComputePriceList
 from pricing_api_client.models.compute_price_page import ComputePricePage as ComputePricePage
@@ -142,8 +150,14 @@ from pricing_api_client.models.registered_database_prices import RegisteredDatab
 from pricing_api_client.models.registered_disk_prices import RegisteredDiskPrices as RegisteredDiskPrices
 from pricing_api_client.models.registered_model_prices import RegisteredModelPrices as RegisteredModelPrices
 from pricing_api_client.models.registration_status import RegistrationStatus as RegistrationStatus
+from pricing_api_client.models.runner_recommendation import RunnerRecommendation as RunnerRecommendation
+from pricing_api_client.models.runner_recommendation_request import RunnerRecommendationRequest as RunnerRecommendationRequest
 from pricing_api_client.models.types_disk import TypesDisk as TypesDisk
 from pricing_api_client.models.types_predicates import TypesPredicates as TypesPredicates
+from pricing_api_client.models.types_runner_current import TypesRunnerCurrent as TypesRunnerCurrent
+from pricing_api_client.models.types_runner_plan_fee import TypesRunnerPlanFee as TypesRunnerPlanFee
+from pricing_api_client.models.types_runner_self_hosted import TypesRunnerSelfHosted as TypesRunnerSelfHosted
+from pricing_api_client.models.types_runner_shape import TypesRunnerShape as TypesRunnerShape
 from pricing_api_client.models.types_savings import TypesSavings as TypesSavings
 from pricing_api_client.models.types_service import TypesService as TypesService
 

@@ -18,7 +18,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, StrictStr
+from pydantic import BaseModel, ConfigDict, StrictBool, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
@@ -34,9 +34,11 @@ class TypesPredicates(BaseModel):
     operating_systems: Optional[List[StrictStr]] = None
     providers: Optional[List[StrictStr]] = None
     regions: Optional[List[StrictStr]] = None
+    same_architecture: Optional[StrictBool] = None
+    same_continent: Optional[StrictBool] = None
     services: Optional[List[StrictStr]] = None
     usage_types: Optional[List[StrictStr]] = None
-    __properties: ClassVar[List[str]] = ["availability_zones", "disk_types", "instance_types", "operating_systems", "providers", "regions", "services", "usage_types"]
+    __properties: ClassVar[List[str]] = ["availability_zones", "disk_types", "instance_types", "operating_systems", "providers", "regions", "same_architecture", "same_continent", "services", "usage_types"]
 
     model_config = ConfigDict(
         validate_by_name=True,
@@ -95,6 +97,8 @@ class TypesPredicates(BaseModel):
             "operating_systems": obj.get("operating_systems"),
             "providers": obj.get("providers"),
             "regions": obj.get("regions"),
+            "same_architecture": obj.get("same_architecture"),
+            "same_continent": obj.get("same_continent"),
             "services": obj.get("services"),
             "usage_types": obj.get("usage_types")
         })

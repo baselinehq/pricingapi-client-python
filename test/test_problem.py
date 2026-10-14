@@ -36,6 +36,12 @@ class TestProblem(unittest.TestCase):
         model = Problem()
         if include_optional:
             return Problem(
+                affected = [
+                    pricing_api_client.models.affected_resource.AffectedResource(
+                        id = '', 
+                        kind = '', 
+                        name = '', )
+                    ],
                 code = '',
                 detail = '',
                 errors = [
