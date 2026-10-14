@@ -68,6 +68,8 @@ class TestDiskRecommendationRequest(unittest.TestCase):
                     regions = [
                         ''
                         ], 
+                    same_architecture = True, 
+                    same_continent = True, 
                     services = [
                         ''
                         ], 
@@ -85,7 +87,8 @@ class TestDiskRecommendationRequest(unittest.TestCase):
                     service = 'ComputeEngine', 
                     throughput_mbps = 1.337, 
                     type = '', 
-                    usage_type = 'SPOT_PREEMPTIBLE', )
+                    usage_type = 'SPOT_PREEMPTIBLE', ),
+                workload_class = ''
             )
         else:
             return DiskRecommendationRequest(

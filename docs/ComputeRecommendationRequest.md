@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **instance** | [**GithubComBaselinehqGolangSharedTypesInstance**](GithubComBaselinehqGolangSharedTypesInstance.md) |  | [optional] 
 **predicates** | [**TypesPredicates**](TypesPredicates.md) |  | [optional] 
 **usage** | [**GithubComBaselinehqGolangSharedTypesVM**](GithubComBaselinehqGolangSharedTypesVM.md) |  | [optional] 
+**workload_class** | **str** | WorkloadClass selects which accelerator gates a compute recommendation applies: inference_single, inference_multi or training_distributed. Empty means inference_multi, which is what the recommender did before the classes existed. Disk requests do not carry one. | [optional] 
 
 ## Example
 

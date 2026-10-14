@@ -58,6 +58,7 @@ class TestRegisteredComputePrices(unittest.TestCase):
                         ram_gb_cost_per_hour = 1.337, 
                         raw_pricing_data = pricing_api_client.models.raw_pricing_data.raw_pricing_data(), 
                         region = '', 
+                        resizable = True, 
                         service = '', 
                         tags = pricing_api_client.models.tags.tags(), 
                         updated_at = '', 

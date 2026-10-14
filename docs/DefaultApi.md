@@ -178,7 +178,9 @@ Name | Type | Description  | Notes
 **200** | Pricing response for a custom provider |  -  |
 **400** | Invalid id |  -  |
 **401** | Provider and organization do not match |  -  |
+**403** | Credential lacks the pricing:write scope or admin role |  -  |
 **404** | Instance not found |  -  |
+**409** | Price is still assigned; the response lists what uses it |  -  |
 **500** | Internal server error |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
@@ -280,6 +282,7 @@ Name | Type | Description  | Notes
 **200** | Pricing response for custom pricing |  -  |
 **400** | Invalid limit or offset |  -  |
 **401** | Unauthorized |  -  |
+**403** | Credential lacks the pricing:read scope or member role |  -  |
 **500** | Internal server error |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
@@ -290,6 +293,7 @@ Name | Type | Description  | Notes
 Register a custom provider
 
 Register your own compute rates so CostGraph can price machines it has no public price for, such as bare metal or a private cloud.
+Send either `cost_per_hour` or the per-resource rates (`cpu_cores_cost_per_hour`, `ram_gb_cost_per_hour`, `gpu_cost_per_hour`) and the other is derived; send both and they must agree within 0.1%. GPU cost is taken out of `cost_per_hour` before the rest is split across cpu and memory. A `cost_per_hour` of 0, or cpu and memory rates that are both 0, count as not sent. `service`, `region`, `cpu_cores`, `ram_gb` and `period_billing_hours` (1 for an hourly price) are required.
 An entry is upserted on its natural key (provider, service, region, availability zone, usage type, instance type, operating system and period billing hours), so re-posting the same entry with a new cost keeps its id and reprices everything already using it. Changing any key field mints a new id, because it describes a different SKU.
 The returned id is what you attach to a resource with the `costgraph.ai/pricing-id.compute` label or tag. Treat it as a secret you hand out deliberately: anyone holding it can pin to the rate, which is how a provider prices clusters it sells on.
 Superseded by POST /v1/marketplace/compute, which returns RFC 9457 problem responses on failure.
@@ -373,6 +377,7 @@ Name | Type | Description  | Notes
 **200** | Pricing response for a custom provider |  -  |
 **400** | Invalid request body |  -  |
 **401** | Provider and organization do not match |  -  |
+**403** | Credential lacks the pricing:write scope or admin role |  -  |
 **500** | Internal server error |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
@@ -465,6 +470,7 @@ Name | Type | Description  | Notes
 **200** | Pricing response for custom database pricing |  -  |
 **400** | Invalid id |  -  |
 **401** | Provider and organization do not match |  -  |
+**403** | Credential lacks the pricing:write scope or admin role |  -  |
 **404** | Database pricing entry not found |  -  |
 **500** | Internal server error |  -  |
 
@@ -571,6 +577,7 @@ Name | Type | Description  | Notes
 **200** | Pricing response for custom database pricing |  -  |
 **400** | Invalid limit or offset |  -  |
 **401** | Unauthorized |  -  |
+**403** | Credential lacks the pricing:read scope or member role |  -  |
 **500** | Internal server error |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
@@ -581,6 +588,7 @@ Name | Type | Description  | Notes
 Register custom database pricing
 
 Register your own managed database rates, keyed by engine, edition, deployment option, storage type and instance type alongside the usual provider, service and region.
+Send either `cost_per_hour` or the cpu and memory rates and the other is derived; send both and they must agree within 0.1%. A database without `cpu_cores` or `ram_gb`, such as a serverless one, needs no rates and only at least one price of any kind. `service`, `region`, `engine` and `period_billing_hours` (1 for an hourly price) are required.
 An entry is upserted on the full natural key (provider, service, region, availability zone, usage type, engine, edition, deployment option, billing config, storage type, instance type, architecture and period billing hours), so re-posting with a new cost keeps its id; changing any key field mints a new one.
 The returned id is what you attach with the `costgraph.ai/pricing-id.database` label or tag.
 Superseded by POST /v1/marketplace/databases, which returns RFC 9457 problem responses on failure.
@@ -664,6 +672,7 @@ Name | Type | Description  | Notes
 **200** | Pricing response for custom database pricing |  -  |
 **400** | Invalid request body |  -  |
 **401** | Provider and organization do not match |  -  |
+**403** | Credential lacks the pricing:write scope or admin role |  -  |
 **500** | Internal server error |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
@@ -756,7 +765,9 @@ Name | Type | Description  | Notes
 **200** | Pricing response for a custom disk provider |  -  |
 **400** | Invalid id |  -  |
 **401** | Provider and organization do not match |  -  |
+**403** | Credential lacks the pricing:write scope or admin role |  -  |
 **404** | Disk pricing entry not found |  -  |
+**409** | Price is still assigned; the response lists what uses it |  -  |
 **500** | Internal server error |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
@@ -858,6 +869,7 @@ Name | Type | Description  | Notes
 **200** | Pricing response for custom disk pricing |  -  |
 **400** | Invalid limit or offset |  -  |
 **401** | Unauthorized |  -  |
+**403** | Credential lacks the pricing:read scope or member role |  -  |
 **500** | Internal server error |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
@@ -952,6 +964,7 @@ Name | Type | Description  | Notes
 **200** | Pricing response for a custom disk provider |  -  |
 **400** | Invalid request body |  -  |
 **401** | Provider and organization do not match |  -  |
+**403** | Credential lacks the pricing:write scope or admin role |  -  |
 **500** | Internal server error |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
@@ -1043,6 +1056,7 @@ Name | Type | Description  | Notes
 **200** | Pricing response for custom model pricing |  -  |
 **400** | Invalid id |  -  |
 **401** | Host and organization do not match |  -  |
+**403** | Credential lacks the pricing:write scope or admin role |  -  |
 **404** | Model pricing entry not found |  -  |
 **500** | Internal server error |  -  |
 
@@ -1100,7 +1114,7 @@ with pricing_api_client.ApiClient(configuration) as api_client:
     model = 'model_example' # str | Filter by model (optional)
     provider = 'provider_example' # str | Filter by model provider (optional)
     region = 'region_example' # str | Filter by region (optional)
-    token_bucket = 'token_bucket_example' # str | Filter by token bucket (optional)
+    token_bucket = 'token_bucket_example' # str | Filter by token bucket. Every bucket is priced separately, so a model has one price per bucket (optional)
 
     try:
         # Get your custom model pricing entries
@@ -1123,7 +1137,7 @@ Name | Type | Description  | Notes
  **model** | **str**| Filter by model | [optional] 
  **provider** | **str**| Filter by model provider | [optional] 
  **region** | **str**| Filter by region | [optional] 
- **token_bucket** | **str**| Filter by token bucket | [optional] 
+ **token_bucket** | **str**| Filter by token bucket. Every bucket is priced separately, so a model has one price per bucket | [optional] 
 
 ### Return type
 
@@ -1145,6 +1159,7 @@ Name | Type | Description  | Notes
 **200** | Pricing response for custom model pricing |  -  |
 **400** | Invalid limit or offset |  -  |
 **401** | Unauthorized |  -  |
+**403** | Credential lacks the pricing:read scope or member role |  -  |
 **500** | Internal server error |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
@@ -1154,7 +1169,8 @@ Name | Type | Description  | Notes
 
 Register custom model pricing
 
-Register custom token pricing for models you host. Entries are versioned: a price change closes the current row and opens a new one, so historic spend keeps the rate it was billed at.
+Register custom token pricing for models you host. Every token bucket is priced separately, so submit one entry per bucket you charge for - `input`, `output`, `cache_read`, `cache_write` - each with its own `unit_price_per_mtok`. A bucket you leave out has no rate, and usage in it resolves to no price rather than to zero.
+Entries are versioned: a price change closes the current row and opens a new one, so historic spend keeps the rate it was billed at.
 The returned id is what you attach with the `costgraph.ai/pricing-id.model` label or tag. Each version carries its own id, so read the live entry back after a price change instead of holding on to an earlier one.
 Superseded by POST /v1/marketplace/models, which returns RFC 9457 problem responses on failure.
 
@@ -1237,12 +1253,13 @@ Name | Type | Description  | Notes
 **200** | Pricing response for custom model pricing |  -  |
 **400** | Invalid request body |  -  |
 **401** | Host and organization do not match |  -  |
+**403** | Credential lacks the pricing:write scope or admin role |  -  |
 **500** | Internal server error |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **pricing_compute_post**
-> ComputePrice pricing_compute_post(instance)
+> ComputePrice pricing_compute_post(instance, persist=persist)
 
 Get pricing for an instance
 
@@ -1289,10 +1306,11 @@ with pricing_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = pricing_api_client.DefaultApi(api_client)
     instance = pricing_api_client.Instance() # Instance | Instance
+    persist = True # bool | Save a price computed for a shape the catalogue does not list. Defaults to true. (optional)
 
     try:
         # Get pricing for an instance
-        api_response = api_instance.pricing_compute_post(instance)
+        api_response = api_instance.pricing_compute_post(instance, persist=persist)
         print("The response of DefaultApi->pricing_compute_post:\n")
         pprint(api_response)
     except Exception as e:
@@ -1307,6 +1325,7 @@ with pricing_api_client.ApiClient(configuration) as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **instance** | [**Instance**](Instance.md)| Instance | 
+ **persist** | **bool**| Save a price computed for a shape the catalogue does not list. Defaults to true. | [optional] 
 
 ### Return type
 
@@ -1426,7 +1445,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **pricing_post**
-> ComputePrice pricing_post(instance)
+> ComputePrice pricing_post(instance, persist=persist)
 
 Get pricing for an instance
 
@@ -1473,10 +1492,11 @@ with pricing_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = pricing_api_client.DefaultApi(api_client)
     instance = pricing_api_client.Instance() # Instance | Instance
+    persist = True # bool | Save a price computed for a shape the catalogue does not list. Defaults to true. (optional)
 
     try:
         # Get pricing for an instance
-        api_response = api_instance.pricing_post(instance)
+        api_response = api_instance.pricing_post(instance, persist=persist)
         print("The response of DefaultApi->pricing_post:\n")
         pprint(api_response)
     except Exception as e:
@@ -1491,6 +1511,7 @@ with pricing_api_client.ApiClient(configuration) as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **instance** | [**Instance**](Instance.md)| Instance | 
+ **persist** | **bool**| Save a price computed for a shape the catalogue does not list. Defaults to true. | [optional] 
 
 ### Return type
 
@@ -1602,7 +1623,7 @@ This endpoint does not need any parameter.
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **recommendations_compute_post**
-> List[ComputeRecommendation] recommendations_compute_post(instance)
+> List[ComputeRecommendation] recommendations_compute_post(instance, persist=persist)
 
 Get recommendations for compute instances
 
@@ -1649,10 +1670,11 @@ with pricing_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = pricing_api_client.DefaultApi(api_client)
     instance = pricing_api_client.ComputeRecommendationRequest() # ComputeRecommendationRequest | Instance
+    persist = True # bool | Save a price computed for a shape the catalogue does not list. Defaults to true. (optional)
 
     try:
         # Get recommendations for compute instances
-        api_response = api_instance.recommendations_compute_post(instance)
+        api_response = api_instance.recommendations_compute_post(instance, persist=persist)
         print("The response of DefaultApi->recommendations_compute_post:\n")
         pprint(api_response)
     except Exception as e:
@@ -1667,6 +1689,7 @@ with pricing_api_client.ApiClient(configuration) as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **instance** | [**ComputeRecommendationRequest**](ComputeRecommendationRequest.md)| Instance | 
+ **persist** | **bool**| Save a price computed for a shape the catalogue does not list. Defaults to true. | [optional] 
 
 ### Return type
 
@@ -1786,7 +1809,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **recommendations_post**
-> List[ComputeRecommendation] recommendations_post(instance)
+> List[ComputeRecommendation] recommendations_post(instance, persist=persist)
 
 Get recommendations for compute instances
 
@@ -1833,10 +1856,11 @@ with pricing_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = pricing_api_client.DefaultApi(api_client)
     instance = pricing_api_client.ComputeRecommendationRequest() # ComputeRecommendationRequest | Instance
+    persist = True # bool | Save a price computed for a shape the catalogue does not list. Defaults to true. (optional)
 
     try:
         # Get recommendations for compute instances
-        api_response = api_instance.recommendations_post(instance)
+        api_response = api_instance.recommendations_post(instance, persist=persist)
         print("The response of DefaultApi->recommendations_post:\n")
         pprint(api_response)
     except Exception as e:
@@ -1851,6 +1875,7 @@ with pricing_api_client.ApiClient(configuration) as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **instance** | [**ComputeRecommendationRequest**](ComputeRecommendationRequest.md)| Instance | 
+ **persist** | **bool**| Save a price computed for a shape the catalogue does not list. Defaults to true. | [optional] 
 
 ### Return type
 

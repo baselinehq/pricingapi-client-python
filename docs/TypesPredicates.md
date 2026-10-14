@@ -11,6 +11,8 @@ Name | Type | Description | Notes
 **operating_systems** | **List[str]** |  | [optional] 
 **providers** | **List[str]** |  | [optional] 
 **regions** | **List[str]** |  | [optional] 
+**same_architecture** | **bool** |  | [optional] 
+**same_continent** | **bool** |  | [optional] 
 **services** | **List[str]** |  | [optional] 
 **usage_types** | **List[str]** |  | [optional] 
 

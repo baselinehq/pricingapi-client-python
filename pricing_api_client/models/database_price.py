@@ -18,7 +18,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, StrictFloat, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from typing import Optional, Set
 from typing_extensions import Self
@@ -42,7 +42,7 @@ class DatabasePrice(BaseModel):
     cpu_cores: Optional[Union[StrictFloat, StrictInt]] = None
     cpu_cores_cost_per_hour: Optional[Union[StrictFloat, StrictInt]] = None
     created_at: Optional[StrictStr] = None
-    currency: Optional[StrictStr] = None
+    currency: Optional[StrictStr] = Field(default=None, description="Currency the provider published this price in. Cost columns are always normalized USD.")
     deployment_option: Optional[StrictStr] = None
     edition: Optional[StrictStr] = None
     engine: Optional[StrictStr] = None
@@ -108,6 +108,96 @@ class DatabasePrice(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # set to None if capacity_unit (nullable) is None
+        # and model_fields_set contains the field
+        if self.capacity_unit is None and "capacity_unit" in self.model_fields_set:
+            _dict['capacity_unit'] = None
+
+        # set to None if cost_per_capacity_unit (nullable) is None
+        # and model_fields_set contains the field
+        if self.cost_per_capacity_unit is None and "cost_per_capacity_unit" in self.model_fields_set:
+            _dict['cost_per_capacity_unit'] = None
+
+        # set to None if cost_per_hour (nullable) is None
+        # and model_fields_set contains the field
+        if self.cost_per_hour is None and "cost_per_hour" in self.model_fields_set:
+            _dict['cost_per_hour'] = None
+
+        # set to None if cost_per_io_request (nullable) is None
+        # and model_fields_set contains the field
+        if self.cost_per_io_request is None and "cost_per_io_request" in self.model_fields_set:
+            _dict['cost_per_io_request'] = None
+
+        # set to None if cost_per_iops_hour (nullable) is None
+        # and model_fields_set contains the field
+        if self.cost_per_iops_hour is None and "cost_per_iops_hour" in self.model_fields_set:
+            _dict['cost_per_iops_hour'] = None
+
+        # set to None if cost_per_storage_gb_hour (nullable) is None
+        # and model_fields_set contains the field
+        if self.cost_per_storage_gb_hour is None and "cost_per_storage_gb_hour" in self.model_fields_set:
+            _dict['cost_per_storage_gb_hour'] = None
+
+        # set to None if cost_per_throughput_mbps_hour (nullable) is None
+        # and model_fields_set contains the field
+        if self.cost_per_throughput_mbps_hour is None and "cost_per_throughput_mbps_hour" in self.model_fields_set:
+            _dict['cost_per_throughput_mbps_hour'] = None
+
+        # set to None if cost_per_vcpu_license_hour (nullable) is None
+        # and model_fields_set contains the field
+        if self.cost_per_vcpu_license_hour is None and "cost_per_vcpu_license_hour" in self.model_fields_set:
+            _dict['cost_per_vcpu_license_hour'] = None
+
+        # set to None if cpu_cores (nullable) is None
+        # and model_fields_set contains the field
+        if self.cpu_cores is None and "cpu_cores" in self.model_fields_set:
+            _dict['cpu_cores'] = None
+
+        # set to None if cpu_cores_cost_per_hour (nullable) is None
+        # and model_fields_set contains the field
+        if self.cpu_cores_cost_per_hour is None and "cpu_cores_cost_per_hour" in self.model_fields_set:
+            _dict['cpu_cores_cost_per_hour'] = None
+
+        # set to None if max_iops (nullable) is None
+        # and model_fields_set contains the field
+        if self.max_iops is None and "max_iops" in self.model_fields_set:
+            _dict['max_iops'] = None
+
+        # set to None if max_storage_gb (nullable) is None
+        # and model_fields_set contains the field
+        if self.max_storage_gb is None and "max_storage_gb" in self.model_fields_set:
+            _dict['max_storage_gb'] = None
+
+        # set to None if max_throughput_mbps (nullable) is None
+        # and model_fields_set contains the field
+        if self.max_throughput_mbps is None and "max_throughput_mbps" in self.model_fields_set:
+            _dict['max_throughput_mbps'] = None
+
+        # set to None if min_iops (nullable) is None
+        # and model_fields_set contains the field
+        if self.min_iops is None and "min_iops" in self.model_fields_set:
+            _dict['min_iops'] = None
+
+        # set to None if min_storage_gb (nullable) is None
+        # and model_fields_set contains the field
+        if self.min_storage_gb is None and "min_storage_gb" in self.model_fields_set:
+            _dict['min_storage_gb'] = None
+
+        # set to None if min_throughput_mbps (nullable) is None
+        # and model_fields_set contains the field
+        if self.min_throughput_mbps is None and "min_throughput_mbps" in self.model_fields_set:
+            _dict['min_throughput_mbps'] = None
+
+        # set to None if ram_gb (nullable) is None
+        # and model_fields_set contains the field
+        if self.ram_gb is None and "ram_gb" in self.model_fields_set:
+            _dict['ram_gb'] = None
+
+        # set to None if ram_gb_cost_per_hour (nullable) is None
+        # and model_fields_set contains the field
+        if self.ram_gb_cost_per_hour is None and "ram_gb_cost_per_hour" in self.model_fields_set:
+            _dict['ram_gb_cost_per_hour'] = None
+
         return _dict
 
     @classmethod

@@ -16,7 +16,8 @@ from pydantic import validate_call, Field, StrictFloat, StrictStr, StrictInt
 from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 
-from pydantic import Field
+from pydantic import Field, StrictBool
+from typing import Optional
 from typing_extensions import Annotated
 from pricing_api_client.models.compute_price import ComputePrice
 from pricing_api_client.models.disk import Disk
@@ -45,6 +46,7 @@ class PricingApi:
     def v1_pricing_compute_post(
         self,
         instance: Annotated[Instance, Field(description="Machine to price")],
+        persist: Annotated[Optional[StrictBool], Field(description="Save a price computed for a shape the catalogue does not list, so later lookups return the same row. Defaults to true; false returns the same price without saving it.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -64,6 +66,8 @@ class PricingApi:
 
         :param instance: Machine to price (required)
         :type instance: Instance
+        :param persist: Save a price computed for a shape the catalogue does not list, so later lookups return the same row. Defaults to true; false returns the same price without saving it.
+        :type persist: bool
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -88,6 +92,7 @@ class PricingApi:
 
         _param = self._v1_pricing_compute_post_serialize(
             instance=instance,
+            persist=persist,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -117,6 +122,7 @@ class PricingApi:
     def v1_pricing_compute_post_with_http_info(
         self,
         instance: Annotated[Instance, Field(description="Machine to price")],
+        persist: Annotated[Optional[StrictBool], Field(description="Save a price computed for a shape the catalogue does not list, so later lookups return the same row. Defaults to true; false returns the same price without saving it.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -136,6 +142,8 @@ class PricingApi:
 
         :param instance: Machine to price (required)
         :type instance: Instance
+        :param persist: Save a price computed for a shape the catalogue does not list, so later lookups return the same row. Defaults to true; false returns the same price without saving it.
+        :type persist: bool
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -160,6 +168,7 @@ class PricingApi:
 
         _param = self._v1_pricing_compute_post_serialize(
             instance=instance,
+            persist=persist,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -189,6 +198,7 @@ class PricingApi:
     def v1_pricing_compute_post_without_preload_content(
         self,
         instance: Annotated[Instance, Field(description="Machine to price")],
+        persist: Annotated[Optional[StrictBool], Field(description="Save a price computed for a shape the catalogue does not list, so later lookups return the same row. Defaults to true; false returns the same price without saving it.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -208,6 +218,8 @@ class PricingApi:
 
         :param instance: Machine to price (required)
         :type instance: Instance
+        :param persist: Save a price computed for a shape the catalogue does not list, so later lookups return the same row. Defaults to true; false returns the same price without saving it.
+        :type persist: bool
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -232,6 +244,7 @@ class PricingApi:
 
         _param = self._v1_pricing_compute_post_serialize(
             instance=instance,
+            persist=persist,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -256,6 +269,7 @@ class PricingApi:
     def _v1_pricing_compute_post_serialize(
         self,
         instance,
+        persist,
         _request_auth,
         _content_type,
         _headers,
@@ -278,6 +292,10 @@ class PricingApi:
 
         # process the path parameters
         # process the query parameters
+        if persist is not None:
+            
+            _query_params.append(('persist', persist))
+            
         # process the header parameters
         # process the form parameters
         # process the body parameter

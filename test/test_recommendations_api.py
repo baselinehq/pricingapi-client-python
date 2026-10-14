@@ -41,6 +41,13 @@ class TestRecommendationsApi(unittest.TestCase):
         """
         pass
 
+    def test_v1_recommendations_runner_post(self) -> None:
+        """Test case for v1_recommendations_runner_post
+
+        Find cheaper CI runners
+        """
+        pass
+
 
 if __name__ == '__main__':
     unittest.main()

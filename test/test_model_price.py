@@ -63,7 +63,7 @@ class TestModelPrice(unittest.TestCase):
                 source_url = '',
                 structured_output = True,
                 tags = None,
-                token_bucket = '',
+                token_bucket = 'input',
                 tool_call = True,
                 unit_price_per_mtok = 1.337
             )

@@ -56,6 +56,7 @@ class TestComputePrice(unittest.TestCase):
                 ram_gb_cost_per_hour = 1.337,
                 raw_pricing_data = None,
                 region = '',
+                resizable = True,
                 service = '',
                 tags = None,
                 updated_at = '',

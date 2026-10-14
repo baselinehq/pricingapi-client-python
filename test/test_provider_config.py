@@ -55,6 +55,8 @@ class TestProviderConfig(unittest.TestCase):
                     regions = [
                         ''
                         ], 
+                    same_architecture = True, 
+                    same_continent = True, 
                     services = [
                         ''
                         ], 

@@ -5,8 +5,11 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**cost_per_work_unit** | **float** |  | [optional] 
+**cpu_class** | **str** |  | [optional] 
 **pricing** | [**ComputePrice**](ComputePrice.md) |  | [optional] 
 **savings** | [**TypesSavings**](TypesSavings.md) |  | [optional] 
+**work_unit** | **str** |  | [optional] 
 
 ## Example
 

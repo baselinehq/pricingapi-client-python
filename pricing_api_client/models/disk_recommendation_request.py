@@ -18,7 +18,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, StrictBool
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from pricing_api_client.models.types_disk import TypesDisk
 from pricing_api_client.models.types_predicates import TypesPredicates
@@ -34,7 +34,8 @@ class DiskRecommendationRequest(BaseModel):
     instance: Optional[TypesDisk] = None
     predicates: Optional[TypesPredicates] = None
     usage: Optional[TypesDisk] = None
-    __properties: ClassVar[List[str]] = ["include_metadata", "instance", "predicates", "usage"]
+    workload_class: Optional[StrictStr] = Field(default=None, description="WorkloadClass selects which accelerator gates a compute recommendation applies: inference_single, inference_multi or training_distributed. Empty means inference_multi, which is what the recommender did before the classes existed. Disk requests do not carry one.")
+    __properties: ClassVar[List[str]] = ["include_metadata", "instance", "predicates", "usage", "workload_class"]
 
     model_config = ConfigDict(
         validate_by_name=True,
@@ -99,7 +100,8 @@ class DiskRecommendationRequest(BaseModel):
             "include_metadata": obj.get("include_metadata"),
             "instance": TypesDisk.from_dict(obj["instance"]) if obj.get("instance") is not None else None,
             "predicates": TypesPredicates.from_dict(obj["predicates"]) if obj.get("predicates") is not None else None,
-            "usage": TypesDisk.from_dict(obj["usage"]) if obj.get("usage") is not None else None
+            "usage": TypesDisk.from_dict(obj["usage"]) if obj.get("usage") is not None else None,
+            "workload_class": obj.get("workload_class")
         })
         return _obj
 

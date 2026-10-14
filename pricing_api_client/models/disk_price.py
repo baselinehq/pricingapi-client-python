@@ -18,7 +18,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, StrictFloat, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from typing import Optional, Set
 from typing_extensions import Self
@@ -33,12 +33,12 @@ class DiskPrice(BaseModel):
     cost_per_iops_hour: Optional[Union[StrictFloat, StrictInt]] = None
     cost_per_throughput_mbps_hour: Optional[Union[StrictFloat, StrictInt]] = None
     created_at: Optional[StrictStr] = None
-    currency: Optional[StrictStr] = None
+    currency: Optional[StrictStr] = Field(default=None, description="Currency the provider published this price in. Cost columns are always normalized USD.")
     id: Optional[StrictStr] = None
-    max_capacity_gb: Optional[Union[StrictFloat, StrictInt]] = None
+    max_capacity_gb: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="Provisioning upper bound the disk type supports at this price (validation range), not an actual disk size.")
     max_iops: Optional[Union[StrictFloat, StrictInt]] = None
     max_throughput_mbps: Optional[Union[StrictFloat, StrictInt]] = None
-    min_capacity_gb: Optional[Union[StrictFloat, StrictInt]] = None
+    min_capacity_gb: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="Provisioning lower bound the disk type supports at this price (validation range), not an actual disk size.")
     min_iops: Optional[Union[StrictFloat, StrictInt]] = None
     min_throughput_mbps: Optional[Union[StrictFloat, StrictInt]] = None
     native_cost_per_gb_hour: Optional[Union[StrictFloat, StrictInt]] = None
