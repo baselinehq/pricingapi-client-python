@@ -5,7 +5,29 @@
 
 name: pricing_api_client Python package
 
-on: [push, pull_request]
+on:
+  push:
+    paths:
+      - "pricing_api_client/**"
+      - "test/**"
+      - "requirements.txt"
+      - "test-requirements.txt"
+      - "pyproject.toml"
+      - "setup.cfg"
+      - "setup.py"
+      - "tox.ini"
+      - ".github/workflows/python.yml"
+  pull_request:
+    paths:
+      - "pricing_api_client/**"
+      - "test/**"
+      - "requirements.txt"
+      - "test-requirements.txt"
+      - "pyproject.toml"
+      - "setup.cfg"
+      - "setup.py"
+      - "tox.ini"
+      - ".github/workflows/python.yml"
 
 permissions:
   contents: read
